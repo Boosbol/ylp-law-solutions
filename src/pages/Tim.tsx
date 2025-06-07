@@ -1,5 +1,3 @@
-
-
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -101,13 +99,6 @@ const Tim = () => {
       pengalaman: "10+ tahun",
       lokasi: "Jakarta",
       photo: "/lovable-uploads/9447345a-f43f-4a66-8b8f-21dc5d19f7b2.png"
-    },
-    {
-      nama: "Berry Suswanto S.H",
-      posisi: "Associate in Private Law",
-      spesialisasi: ["Hukum Perdata", "Hukum Kontrak", "Hukum Properti"],
-      pengalaman: "10+ tahun",
-      lokasi: "Jakarta"
     },
     {
       nama: "Lina Kristie S.H.",
@@ -348,4 +339,3 @@ const Tim = () => {
 };
 
 export default Tim;
-
