@@ -113,8 +113,8 @@ const ChatWidget = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-80 h-[500px] shadow-xl z-50 flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between p-4 bg-primary text-white rounded-t-lg">
+        <Card className="fixed bottom-6 right-6 w-80 h-[600px] shadow-xl z-50 flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between p-4 bg-primary text-white rounded-t-lg flex-shrink-0">
             <div className="flex items-center space-x-2">
               <Scale className="h-5 w-5" />
               <CardTitle className="text-sm font-medium">
@@ -131,22 +131,23 @@ const ChatWidget = () => {
             </Button>
           </CardHeader>
           
-          <CardContent className="flex-1 flex flex-col p-0">
+          <CardContent className="flex-1 flex flex-col p-0 min-h-0">
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
               {messages.map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] p-3 rounded-lg text-sm whitespace-pre-wrap ${
+                    className={`max-w-[85%] p-3 rounded-lg text-sm break-words overflow-wrap-anywhere ${
                       message.sender === 'user'
                         ? 'bg-gold-500 text-white'
                         : 'bg-gray-100 text-gray-800'
                     }`}
+                    style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}
                   >
-                    {message.text}
+                    <div className="whitespace-pre-wrap">{message.text}</div>
                   </div>
                 </div>
               ))}
@@ -159,7 +160,7 @@ const ChatWidget = () => {
                     <button
                       key={index}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border transition-colors"
+                      className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border transition-colors break-words"
                       disabled={isLoading}
                     >
                       {suggestion}
@@ -179,7 +180,7 @@ const ChatWidget = () => {
             </div>
 
             {/* Input */}
-            <div className="border-t p-4">
+            <div className="border-t p-4 flex-shrink-0">
               <div className="flex space-x-2">
                 <input
                   type="text"
