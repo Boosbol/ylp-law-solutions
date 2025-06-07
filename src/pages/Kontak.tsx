@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,8 @@ import {
   Building,
   Car,
   Wifi,
-  Coffee
+  Coffee,
+  Instagram
 } from 'lucide-react';
 
 const Kontak = () => {
@@ -55,13 +55,6 @@ const Kontak = () => {
       kontak: "nin_yasmine@yahoo.co.id",
       deskripsi: "Untuk kasus urgent dengan respon maksimal 2 jam"
     }
-  ];
-
-  const mediaSosial = [
-    { platform: "LinkedIn", handle: "@yasmine-lisasih-partners" },
-    { platform: "Instagram", handle: "@yasminelisasihlawoffice" },
-    { platform: "Facebook", handle: "YLP Law Office & Partners" },
-    { platform: "YouTube", handle: "YLP Legal Channel" }
   ];
 
   return (
@@ -243,14 +236,13 @@ const Kontak = () => {
                   <CardTitle className="text-xl">Media Sosial</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 gap-3">
-                    {mediaSosial.map((sosmed, index) => (
-                      <div key={index} className="text-sm">
-                        <span className="font-medium">{sosmed.platform}:</span>
-                        <br />
-                        <span className="text-muted-foreground">{sosmed.handle}</span>
-                      </div>
-                    ))}
+                  <div className="flex items-center space-x-3">
+                    <Instagram className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <span className="font-medium">Instagram:</span>
+                      <br />
+                      <span className="text-muted-foreground">@yasminelisasihlawoffice</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

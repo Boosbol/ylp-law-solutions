@@ -1,5 +1,6 @@
 
 import { Link } from 'react-router-dom';
+import { Instagram } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -59,6 +60,13 @@ const Footer = () => {
               <div>
                 <p className="font-medium">Email</p>
                 <p className="text-sm">nin_yasmine@yahoo.co.id</p>
+              </div>
+              <div>
+                <p className="font-medium">Instagram</p>
+                <div className="flex items-center space-x-2">
+                  <Instagram className="h-4 w-4" />
+                  <p className="text-sm">@yasminelisasihlawoffice</p>
+                </div>
               </div>
             </div>
           </div>
