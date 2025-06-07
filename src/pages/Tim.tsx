@@ -13,7 +13,7 @@ import {
 
 const Tim = () => {
   const advisor = {
-    nama: "Dr. Hotman Paris S.H, M.Hum",
+    nama: "Dr. Hotman Paris S.H, M.H",
     posisi: "Advisor",
     spesialisasi: ["Hukum Pidana", "Hukum Perdata", "Hukum Korporat"],
     pengalaman: "25+ tahun",
@@ -53,7 +53,8 @@ const Tim = () => {
       posisi: "Partner",
       spesialisasi: ["Hukum Korporat", "Hukum Bisnis", "Merger & Akuisisi"],
       pengalaman: "20+ tahun",
-      lokasi: "Jakarta"
+      lokasi: "Jakarta",
+      photo: "/lovable-uploads/9aaad565-3cd1-49df-b92d-7130a4d56bd5.png"
     }
   ];
 
@@ -216,7 +217,7 @@ const Tim = () => {
                     <CardContent className="p-6">
                       <div className="flex flex-col items-center">
                         <Avatar className="h-28 w-28 mb-4">
-                          <AvatarImage src="/lovable-uploads/2349fbc5-deb1-46dd-9bae-218485f74177.png" alt={partner.nama} />
+                          <AvatarImage src={partner.photo} alt={partner.nama} />
                           <AvatarFallback className="text-lg">PA</AvatarFallback>
                         </Avatar>
                         <h3 className="text-xl font-bold mb-2">{partner.nama}</h3>
