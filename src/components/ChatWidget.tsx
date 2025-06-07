@@ -47,23 +47,15 @@ const ChatWidget = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
-    const messageToSend = inputValue;
     setInputValue('');
     setIsLoading(true);
 
     try {
-      console.log('Sending message to legal-chat function:', messageToSend);
-      
       const { data, error } = await supabase.functions.invoke('legal-chat', {
-        body: { message: messageToSend }
+        body: { message: inputValue }
       });
 
-      console.log('Response from legal-chat function:', { data, error });
-
-      if (error) {
-        console.error('Supabase function error:', error);
-        throw error;
-      }
+      if (error) throw error;
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -73,7 +65,6 @@ const ChatWidget = () => {
       };
 
       setMessages(prev => [...prev, aiMessage]);
-      console.log('AI message added successfully');
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
@@ -82,7 +73,6 @@ const ChatWidget = () => {
         variant: "destructive",
       });
     } finally {
-      console.log('Setting loading to false');
       setIsLoading(false);
     }
   };
