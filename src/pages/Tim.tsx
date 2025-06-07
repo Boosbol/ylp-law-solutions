@@ -71,7 +71,8 @@ const Tim = () => {
       "Corporate Law Specialist",
       "Business Compliance Expert",
       "Legal Consultant"
-    ]
+    ],
+    photo: "/lovable-uploads/b099367d-775b-46a0-b916-0fbc9a74fd46.png"
   };
 
   const associates = [
@@ -257,7 +258,7 @@ const Tim = () => {
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center">
                     <Avatar className="h-28 w-28 mb-4">
-                      <AvatarImage src="/lovable-uploads/5cdca76e-df6d-4525-857e-120585253a25.png" alt={seniorAssociate.nama} />
+                      <AvatarImage src={seniorAssociate.photo} alt={seniorAssociate.nama} />
                       <AvatarFallback className="text-lg">AS</AvatarFallback>
                     </Avatar>
                     <h3 className="text-xl font-bold mb-2">{seniorAssociate.nama}</h3>
