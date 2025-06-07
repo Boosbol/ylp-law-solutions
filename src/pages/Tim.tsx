@@ -99,7 +99,8 @@ const Tim = () => {
       posisi: "Associate in Private Law",
       spesialisasi: ["Hukum Perdata", "Hukum Keluarga", "Hukum Waris"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta"
+      lokasi: "Jakarta",
+      photo: "/lovable-uploads/9447345a-f43f-4a66-8b8f-21dc5d19f7b2.png"
     },
     {
       nama: "Berry Suswanto S.H",
@@ -113,7 +114,8 @@ const Tim = () => {
       posisi: "Associate in Land Law",
       spesialisasi: ["Hukum Pertanahan", "Sertifikat Tanah", "Hukum Properti"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta"
+      lokasi: "Jakarta",
+      photo: "/lovable-uploads/c1308c04-2c48-4fad-8b68-ac3d5d273eac.png"
     },
     {
       nama: "Widjayati S.H., S.Ak",
