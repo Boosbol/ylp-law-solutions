@@ -22,8 +22,8 @@ const Kontak = () => {
     {
       jenis: "Kantor Pusat",
       alamat: "Paragon Business Park Blok B28 V, Lippo Cikarang, Bekasi 17550",
-      telepon: "+62 21 8965 4321",
-      email: "info@ylp-law.com",
+      telepon: "+62 856 4211 1789",
+      email: "nin_yasmine@yahoo.co.id",
       jamOperasional: "Senin - Jumat: 08:00 - 17:00 WIB",
       koordinat: "Lippo Cikarang",
       fasilitas: ["Parking Area", "Free WiFi", "Meeting Room", "Waiting Lounge"]
@@ -31,8 +31,8 @@ const Kontak = () => {
     {
       jenis: "Kantor Cabang",
       alamat: "Jl. Kebon Jeruk XV No.13, Kebon Jeruk, Jakarta Barat 11530",
-      telepon: "+62 21 1234 5678",
-      email: "jakarta@ylp-law.com",
+      telepon: "+62 878 8471 7155",
+      email: "nin_yasmine@yahoo.co.id",
       jamOperasional: "Senin - Jumat: 09:00 - 17:00 WIB",
       koordinat: "Jakarta Barat",
       fasilitas: ["Parking Area", "Free WiFi", "Conference Room", "Coffee Bar"]
@@ -41,25 +41,25 @@ const Kontak = () => {
 
   const kontakDarurat = [
     {
-      layanan: "Hotline 24/7",
-      kontak: "+62 811 911 7777",
+      layanan: "Kontak Darurat",
+      kontak: "+62 821 3746 2729",
       deskripsi: "Untuk keadaan darurat hukum dan konsultasi mendesak"
     },
     {
       layanan: "WhatsApp Business",
-      kontak: "+62 813 8888 9999",
+      kontak: "+62 856 4211 1789",
       deskripsi: "Chat langsung dengan tim customer service"
     },
     {
       layanan: "Email Priority",
-      kontak: "urgent@ylp-law.com",
+      kontak: "nin_yasmine@yahoo.co.id",
       deskripsi: "Untuk kasus urgent dengan respon maksimal 2 jam"
     }
   ];
 
   const mediaSosial = [
     { platform: "LinkedIn", handle: "@yasmine-lisasih-partners" },
-    { platform: "Instagram", handle: "@ylp_law_office" },
+    { platform: "Instagram", handle: "@yasminelisasihlawoffice" },
     { platform: "Facebook", handle: "YLP Law Office & Partners" },
     { platform: "YouTube", handle: "YLP Legal Channel" }
   ];

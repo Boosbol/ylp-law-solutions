@@ -48,11 +48,17 @@ const Footer = () => {
                 <p className="font-medium">Kantor Pusat</p>
                 <p className="text-sm">Paragon Business Park Blok B28 V</p>
                 <p className="text-sm">Lippo Cikarang, Bekasi</p>
+                <p className="text-sm">+62 856 4211 1789</p>
               </div>
               <div>
                 <p className="font-medium">Kantor Cabang</p>
                 <p className="text-sm">Jl. Kebon Jeruk XV No.13</p>
                 <p className="text-sm">Jakarta Barat</p>
+                <p className="text-sm">+62 878 8471 7155</p>
+              </div>
+              <div>
+                <p className="font-medium">Email</p>
+                <p className="text-sm">nin_yasmine@yahoo.co.id</p>
               </div>
             </div>
           </div>
