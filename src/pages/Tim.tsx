@@ -45,6 +45,16 @@ const Tim = () => {
     ]
   };
 
+  const partners = [
+    {
+      nama: "Phiong Arifin S.H.",
+      posisi: "Partner",
+      spesialisasi: ["Hukum Korporat", "Hukum Bisnis", "Merger & Akuisisi"],
+      pengalaman: "20+ tahun",
+      lokasi: "Jakarta"
+    }
+  ];
+
   const seniorAssociate = {
     nama: "Ahlluddin Saiful Ahmad S.H., M.H.",
     posisi: "Senior Associate",
@@ -67,48 +77,42 @@ const Tim = () => {
       posisi: "Associate in Criminal Law",
       spesialisasi: ["Hukum Pidana", "Perlindungan Saksi", "Hukum Acara Pidana"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta",
-      pengalamanKerja: [
-        "Senior Legal Counsel di PT. Mandiri Utama (2019-2024)",
-        "Legal Associate di Law Firm Terkemuka (2016-2019)",
-        "Junior Associate di Kejaksaan Negeri Jakarta (2014-2016)"
-      ]
+      lokasi: "Jakarta"
     },
     {
       nama: "Indra Sihombing S.H., M.H.",
       posisi: "Associate in Criminal Law", 
       spesialisasi: ["Hukum Pidana", "Hukum Pidana Khusus", "Advokasi"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta",
-      pengalamanKerja: [
-        "Partner Associate di Firma Hukum Internasional (2018-2024)",
-        "Legal Advisor di Perusahaan Multinasional (2015-2018)",
-        "Associate Lawyer di KPK (2014-2015)"
-      ]
+      lokasi: "Jakarta"
     },
     {
       nama: "Edina Giawa S.H.",
       posisi: "Associate in Private Law",
       spesialisasi: ["Hukum Perdata", "Hukum Keluarga", "Hukum Waris"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta",
-      pengalamanKerja: [
-        "Senior Legal Consultant di Bank Nasional (2017-2024)",
-        "Legal Officer di Notaris Terkemuka (2014-2017)",
-        "Junior Associate di Pengadilan Negeri (2014-2014)"
-      ]
+      lokasi: "Jakarta"
     },
     {
       nama: "Berry Suswanto S.H",
       posisi: "Associate in Private Law",
       spesialisasi: ["Hukum Perdata", "Hukum Kontrak", "Hukum Properti"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta",
-      pengalamanKerja: [
-        "Legal Manager di Developer Properti Besar (2018-2024)",
-        "Contract Specialist di Perusahaan Konstruksi (2015-2018)",
-        "Legal Associate di Firma Hukum Bisnis (2014-2015)"
-      ]
+      lokasi: "Jakarta"
+    },
+    {
+      nama: "Lina Kristie S.H.",
+      posisi: "Associate in Land Law",
+      spesialisasi: ["Hukum Pertanahan", "Sertifikat Tanah", "Hukum Properti"],
+      pengalaman: "10+ tahun",
+      lokasi: "Jakarta"
+    },
+    {
+      nama: "Widjayati S.H., S.Ak",
+      posisi: "Associate in Tax Law",
+      spesialisasi: ["Hukum Pajak", "Perencanaan Pajak", "Sengketa Pajak"],
+      pengalaman: "10+ tahun",
+      lokasi: "Jakarta"
     }
   ];
 
@@ -199,6 +203,48 @@ const Tim = () => {
               <ArrowDown className="h-8 w-8 text-primary" />
             </div>
 
+            {/* Partners */}
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-6">Partners</h2>
+              <div className="flex justify-center">
+                {partners.map((partner, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      <div className="flex flex-col items-center">
+                        <div className="bg-gray-200 rounded-full h-28 w-28 mx-auto mb-4 flex items-center justify-center">
+                          <span className="text-gray-500 text-sm">Photo</span>
+                        </div>
+                        <h3 className="text-xl font-bold mb-2">{partner.nama}</h3>
+                        <p className="text-gold-600 font-semibold mb-4">{partner.posisi}</p>
+                        
+                        <div className="mb-4">
+                          <div className="flex items-center justify-center space-x-2 mb-2">
+                            <Briefcase className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm font-medium">{partner.pengalaman} pengalaman</span>
+                          </div>
+                          <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground mb-2">
+                            <MapPin className="h-3 w-3" />
+                            <span>{partner.lokasi}</span>
+                          </div>
+                          <div className="flex flex-wrap gap-2 justify-center">
+                            {partner.spesialisasi.map((spec, specIndex) => (
+                              <Badge key={specIndex} variant="secondary" className="text-xs">
+                                {spec}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-center mb-8">
+              <ArrowDown className="h-8 w-8 text-primary" />
+            </div>
+
             {/* Senior Associate */}
             <div className="text-center mb-8">
               <Card className="inline-block hover:shadow-lg transition-shadow duration-300">
@@ -235,96 +281,36 @@ const Tim = () => {
             {/* Associates */}
             <div className="text-center">
               <h2 className="text-2xl font-bold mb-8">Associates</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Criminal Law Associates */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 text-gold-600">Associate in Criminal Law</h3>
-                  <div className="space-y-4">
-                    {associates.filter(associate => associate.posisi.includes("Criminal")).map((associate, index) => (
-                      <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
-                        <CardContent className="p-6">
-                          <div className="flex flex-col items-center text-center">
-                            <div className="bg-gray-200 rounded-full h-20 w-20 mx-auto mb-3 flex items-center justify-center">
-                              <span className="text-gray-500 text-xs">Photo</span>
-                            </div>
-                            <h4 className="text-lg font-semibold mb-2">{associate.nama}</h4>
-                            <div className="mb-3">
-                              <span className="text-sm text-muted-foreground">{associate.pengalaman} pengalaman</span>
-                            </div>
-                            <div className="mb-3">
-                              <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground mb-2">
-                                <MapPin className="h-3 w-3" />
-                                <span>{associate.lokasi}</span>
-                              </div>
-                            </div>
-                            <div className="mb-4">
-                              <h5 className="text-sm font-semibold mb-2">Pengalaman Kerja:</h5>
-                              <div className="space-y-1 text-xs text-muted-foreground">
-                                {associate.pengalamanKerja.map((exp, expIndex) => (
-                                  <div key={expIndex} className="text-left">
-                                    • {exp}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                            <div className="flex flex-wrap gap-1 justify-center">
-                              {associate.spesialisasi.map((spec, specIndex) => (
-                                <Badge key={specIndex} variant="outline" className="text-xs">
-                                  {spec}
-                                </Badge>
-                              ))}
-                            </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {associates.map((associate, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+                    <CardContent className="p-6">
+                      <div className="flex flex-col items-center text-center">
+                        <div className="bg-gray-200 rounded-full h-20 w-20 mx-auto mb-3 flex items-center justify-center">
+                          <span className="text-gray-500 text-xs">Photo</span>
+                        </div>
+                        <h4 className="text-lg font-semibold mb-2">{associate.nama}</h4>
+                        <p className="text-gold-600 font-medium mb-3 text-sm">{associate.posisi}</p>
+                        <div className="mb-3">
+                          <span className="text-sm text-muted-foreground">{associate.pengalaman} pengalaman</span>
+                        </div>
+                        <div className="mb-3">
+                          <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground mb-2">
+                            <MapPin className="h-3 w-3" />
+                            <span>{associate.lokasi}</span>
                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Private Law Associates */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4 text-gold-600">Associate in Private Law</h3>
-                  <div className="space-y-4">
-                    {associates.filter(associate => associate.posisi.includes("Private")).map((associate, index) => (
-                      <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
-                        <CardContent className="p-6">
-                          <div className="flex flex-col items-center text-center">
-                            <div className="bg-gray-200 rounded-full h-20 w-20 mx-auto mb-3 flex items-center justify-center">
-                              <span className="text-gray-500 text-xs">Photo</span>
-                            </div>
-                            <h4 className="text-lg font-semibold mb-2">{associate.nama}</h4>
-                            <div className="mb-3">
-                              <span className="text-sm text-muted-foreground">{associate.pengalaman} pengalaman</span>
-                            </div>
-                            <div className="mb-3">
-                              <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground mb-2">
-                                <MapPin className="h-3 w-3" />
-                                <span>{associate.lokasi}</span>
-                              </div>
-                            </div>
-                            <div className="mb-4">
-                              <h5 className="text-sm font-semibold mb-2">Pengalaman Kerja:</h5>
-                              <div className="space-y-1 text-xs text-muted-foreground">
-                                {associate.pengalamanKerja.map((exp, expIndex) => (
-                                  <div key={expIndex} className="text-left">
-                                    • {exp}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                            <div className="flex flex-wrap gap-1 justify-center">
-                              {associate.spesialisasi.map((spec, specIndex) => (
-                                <Badge key={specIndex} variant="outline" className="text-xs">
-                                  {spec}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
+                        </div>
+                        <div className="flex flex-wrap gap-1 justify-center">
+                          {associate.spesialisasi.map((spec, specIndex) => (
+                            <Badge key={specIndex} variant="outline" className="text-xs">
+                              {spec}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
           </div>
