@@ -1,5 +1,5 @@
-
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Star, Quote } from 'lucide-react';
 
 const TestimonialSection = () => {
