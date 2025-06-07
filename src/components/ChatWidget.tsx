@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, FileText, Users, Scale } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -18,15 +18,23 @@ const ChatWidget = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Halo! Saya asisten AI Yasmine Lisasih Law Office. Saya dapat membantu Anda dengan informasi umum tentang layanan hukum kami. Ada yang bisa saya bantu?',
+      text: 'Halo! Saya asisten AI Yasmine Lisasih Law Office & Partners. Saya dapat membantu Anda dengan:\n\n• Meringkas layanan hukum kami\n• Menjelaskan keahlian firma\n• Memberikan informasi tentang prosedur konsultasi\n• Menjawab pertanyaan umum tentang hukum\n\nAda yang bisa saya bantu?',
       sender: 'ai',
       timestamp: new Date()
     }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  const suggestionQuestions = [
+    "Apa saja layanan hukum yang tersedia?",
+    "Bagaimana cara konsultasi dengan firma?",
+    "Ringkaskan sejarah dan keunggulan firma",
+    "Apa keahlian khusus tim Anda?"
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -36,12 +44,13 @@ const ChatWidget = () => {
     scrollToBottom();
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+  const sendMessage = async (messageText?: string) => {
+    const textToSend = messageText || inputValue;
+    if (!textToSend.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputValue,
+      text: textToSend,
       sender: 'user',
       timestamp: new Date()
     };
@@ -49,10 +58,11 @@ const ChatWidget = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    setShowSuggestions(false);
 
     try {
       const { data, error } = await supabase.functions.invoke('legal-chat', {
-        body: { message: inputValue }
+        body: { message: textToSend }
       });
 
       if (error) throw error;
@@ -84,6 +94,10 @@ const ChatWidget = () => {
     }
   };
 
+  const handleSuggestionClick = (suggestion: string) => {
+    sendMessage(suggestion);
+  };
+
   return (
     <>
       {/* Chat Toggle Button */}
@@ -99,11 +113,14 @@ const ChatWidget = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-80 h-96 shadow-xl z-50 flex flex-col">
+        <Card className="fixed bottom-6 right-6 w-80 h-[500px] shadow-xl z-50 flex flex-col">
           <CardHeader className="flex flex-row items-center justify-between p-4 bg-primary text-white rounded-t-lg">
-            <CardTitle className="text-sm font-medium">
-              Asisten Hukum AI
-            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Scale className="h-5 w-5" />
+              <CardTitle className="text-sm font-medium">
+                Asisten Hukum AI
+              </CardTitle>
+            </div>
             <Button
               onClick={() => setIsOpen(false)}
               variant="ghost"
@@ -123,7 +140,7 @@ const ChatWidget = () => {
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                    className={`max-w-[85%] p-3 rounded-lg text-sm whitespace-pre-wrap ${
                       message.sender === 'user'
                         ? 'bg-gold-500 text-white'
                         : 'bg-gray-100 text-gray-800'
@@ -133,6 +150,24 @@ const ChatWidget = () => {
                   </div>
                 </div>
               ))}
+              
+              {/* Suggestion Buttons */}
+              {showSuggestions && messages.length === 1 && (
+                <div className="space-y-2">
+                  <div className="text-xs text-gray-500 text-center">Pertanyaan yang sering diajukan:</div>
+                  {suggestionQuestions.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="w-full text-left p-2 text-xs bg-gray-50 hover:bg-gray-100 rounded border transition-colors"
+                      disabled={isLoading}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              )}
+              
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="bg-gray-100 p-3 rounded-lg">
@@ -151,12 +186,12 @@ const ChatWidget = () => {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Ketik pesan Anda..."
+                  placeholder="Tanyakan tentang layanan hukum kami..."
                   className="flex-1 px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
                   disabled={isLoading}
                 />
                 <Button
-                  onClick={sendMessage}
+                  onClick={() => sendMessage()}
                   disabled={!inputValue.trim() || isLoading}
                   size="icon"
                   className="bg-gold-500 hover:bg-gold-600"
