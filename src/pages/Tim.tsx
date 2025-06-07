@@ -46,7 +46,7 @@ const Tim = () => {
       "Certified Mediator - BANI",
       "Member Indonesian Bar Association"
     ],
-    photo: "/lovable-uploads/5cdca76e-df6d-4525-857e-120585253a25.png"
+    photo: "/lovable-uploads/8f82adfa-9b05-4fb1-81f5-08cf8218474d.png"
   };
 
   const partners = [
@@ -218,7 +218,7 @@ const Tim = () => {
                     <CardContent className="p-6">
                       <div className="flex flex-col items-center">
                         <Avatar className="h-28 w-28 mb-4">
-                          <AvatarImage src="/placeholder.svg" alt={partner.nama} />
+                          <AvatarImage src="/lovable-uploads/6ffe09c6-41e8-4341-b16f-85460fa13661.png" alt={partner.nama} />
                           <AvatarFallback className="text-lg">PA</AvatarFallback>
                         </Avatar>
                         <h3 className="text-xl font-bold mb-2">{partner.nama}</h3>
@@ -258,7 +258,7 @@ const Tim = () => {
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center">
                     <Avatar className="h-28 w-28 mb-4">
-                      <AvatarImage src="/placeholder.svg" alt={seniorAssociate.nama} />
+                      <AvatarImage src="/lovable-uploads/f569c827-7860-479a-adba-ea13e6312a7c.png" alt={seniorAssociate.nama} />
                       <AvatarFallback className="text-lg">AS</AvatarFallback>
                     </Avatar>
                     <h3 className="text-xl font-bold mb-2">{seniorAssociate.nama}</h3>
@@ -290,41 +290,49 @@ const Tim = () => {
             <div className="text-center">
               <h2 className="text-2xl font-bold mb-8">Associates</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {associates.map((associate, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                      <div className="flex flex-col items-center text-center">
-                        <Avatar className="h-20 w-20 mb-3">
-                          <AvatarImage 
-                            src={associate.nama === "Widjayati S.H., S.Ak" ? "/lovable-uploads/776115f4-f18f-477b-b306-32aacaf5ec9f.png" : "/placeholder.svg"} 
-                            alt={associate.nama} 
-                          />
-                          <AvatarFallback className="text-sm">
-                            {associate.nama.split(' ').slice(0, 2).map(n => n[0]).join('')}
-                          </AvatarFallback>
-                        </Avatar>
-                        <h4 className="text-lg font-semibold mb-2">{associate.nama}</h4>
-                        <p className="text-gold-600 font-medium mb-3 text-sm">{associate.posisi}</p>
-                        <div className="mb-3">
-                          <span className="text-sm text-muted-foreground">{associate.pengalaman} pengalaman</span>
-                        </div>
-                        <div className="mb-3">
-                          <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground mb-2">
-                            <MapPin className="h-3 w-3" />
-                            <span>{associate.lokasi}</span>
+                {associates.map((associate, index) => {
+                  let photoSrc = "/placeholder.svg";
+                  
+                  // Assign photos based on names
+                  if (associate.nama === "Widjayati S.H., S.Ak") {
+                    photoSrc = "/lovable-uploads/140c4b07-0932-4ce6-a845-8e2fc292c7a1.png";
+                  } else if (associate.nama === "Dhea Arum Saskia S.H., M.H") {
+                    photoSrc = "/lovable-uploads/213c3395-4339-42e8-8397-652fb71f22c9.png";
+                  }
+                  
+                  return (
+                    <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col items-center text-center">
+                          <Avatar className="h-20 w-20 mb-3">
+                            <AvatarImage src={photoSrc} alt={associate.nama} />
+                            <AvatarFallback className="text-sm">
+                              {associate.nama.split(' ').slice(0, 2).map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <h4 className="text-lg font-semibold mb-2">{associate.nama}</h4>
+                          <p className="text-gold-600 font-medium mb-3 text-sm">{associate.posisi}</p>
+                          <div className="mb-3">
+                            <span className="text-sm text-muted-foreground">{associate.pengalaman} pengalaman</span>
+                          </div>
+                          <div className="mb-3">
+                            <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground mb-2">
+                              <MapPin className="h-3 w-3" />
+                              <span>{associate.lokasi}</span>
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap gap-1 justify-center">
+                            {associate.spesialisasi.map((spec, specIndex) => (
+                              <Badge key={specIndex} variant="outline" className="text-xs">
+                                {spec}
+                              </Badge>
+                            ))}
                           </div>
                         </div>
-                        <div className="flex flex-wrap gap-1 justify-center">
-                          {associate.spesialisasi.map((spec, specIndex) => (
-                            <Badge key={specIndex} variant="outline" className="text-xs">
-                              {spec}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           </div>
