@@ -4,9 +4,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   MapPin, 
-  Mail, 
-  Phone, 
-  Linkedin, 
   Award,
   GraduationCap,
   Briefcase,
@@ -29,9 +26,7 @@ const Tim = () => {
       "Pengacara Kondang Indonesia",
       "Hotman Paris Show Host",
       "Praktisi Hukum Senior"
-    ],
-    email: "hotman.paris@ylp-law.com",
-    phone: "+62 21 1234 5678"
+    ]
   };
 
   const managingPartner = {
@@ -47,9 +42,7 @@ const Tim = () => {
       "Advokat Terbaik Kategori Hukum Pidana 2022",
       "Certified Mediator - BANI",
       "Member Indonesian Bar Association"
-    ],
-    email: "yasmine@ylp-law.com",
-    phone: "+62 21 8765 4321"
+    ]
   };
 
   const seniorAssociate = {
@@ -65,9 +58,7 @@ const Tim = () => {
       "Corporate Law Specialist",
       "Business Compliance Expert",
       "Legal Consultant"
-    ],
-    email: "ahlluddin@ylp-law.com",
-    phone: "+62 21 5555 1234"
+    ]
   };
 
   const associates = [
@@ -75,29 +66,49 @@ const Tim = () => {
       nama: "Dhea Arum Saskia S.H., M.H",
       posisi: "Associate in Criminal Law",
       spesialisasi: ["Hukum Pidana", "Perlindungan Saksi", "Hukum Acara Pidana"],
-      pengalaman: "6 tahun",
-      lokasi: "Jakarta"
+      pengalaman: "10+ tahun",
+      lokasi: "Jakarta",
+      pengalamanKerja: [
+        "Senior Legal Counsel di PT. Mandiri Utama (2019-2024)",
+        "Legal Associate di Law Firm Terkemuka (2016-2019)",
+        "Junior Associate di Kejaksaan Negeri Jakarta (2014-2016)"
+      ]
     },
     {
       nama: "Indra Sihombing S.H., M.H.",
       posisi: "Associate in Criminal Law", 
       spesialisasi: ["Hukum Pidana", "Hukum Pidana Khusus", "Advokasi"],
-      pengalaman: "5 tahun",
-      lokasi: "Jakarta"
+      pengalaman: "10+ tahun",
+      lokasi: "Jakarta",
+      pengalamanKerja: [
+        "Partner Associate di Firma Hukum Internasional (2018-2024)",
+        "Legal Advisor di Perusahaan Multinasional (2015-2018)",
+        "Associate Lawyer di KPK (2014-2015)"
+      ]
     },
     {
       nama: "Edina Giawa S.H.",
       posisi: "Associate in Private Law",
       spesialisasi: ["Hukum Perdata", "Hukum Keluarga", "Hukum Waris"],
-      pengalaman: "4 tahun",
-      lokasi: "Jakarta"
+      pengalaman: "10+ tahun",
+      lokasi: "Jakarta",
+      pengalamanKerja: [
+        "Senior Legal Consultant di Bank Nasional (2017-2024)",
+        "Legal Officer di Notaris Terkemuka (2014-2017)",
+        "Junior Associate di Pengadilan Negeri (2014-2014)"
+      ]
     },
     {
       nama: "Berry Suswanto S.H",
       posisi: "Associate in Private Law",
       spesialisasi: ["Hukum Perdata", "Hukum Kontrak", "Hukum Properti"],
-      pengalaman: "4 tahun",
-      lokasi: "Jakarta"
+      pengalaman: "10+ tahun",
+      lokasi: "Jakarta",
+      pengalamanKerja: [
+        "Legal Manager di Developer Properti Besar (2018-2024)",
+        "Contract Specialist di Perusahaan Konstruksi (2015-2018)",
+        "Legal Associate di Firma Hukum Bisnis (2014-2015)"
+      ]
     }
   ];
 
@@ -146,17 +157,6 @@ const Tim = () => {
                         ))}
                       </div>
                     </div>
-
-                    <div className="space-y-2 text-center">
-                      <div className="flex items-center justify-center space-x-2 text-sm">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <span>{advisor.email}</span>
-                      </div>
-                      <div className="flex items-center justify-center space-x-2 text-sm">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        <span>{advisor.phone}</span>
-                      </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -190,17 +190,6 @@ const Tim = () => {
                         ))}
                       </div>
                     </div>
-
-                    <div className="space-y-2 text-center">
-                      <div className="flex items-center justify-center space-x-2 text-sm">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <span>{managingPartner.email}</span>
-                      </div>
-                      <div className="flex items-center justify-center space-x-2 text-sm">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        <span>{managingPartner.phone}</span>
-                      </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -232,17 +221,6 @@ const Tim = () => {
                             {spec}
                           </Badge>
                         ))}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 text-center">
-                      <div className="flex items-center justify-center space-x-2 text-sm">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <span>{seniorAssociate.email}</span>
-                      </div>
-                      <div className="flex items-center justify-center space-x-2 text-sm">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        <span>{seniorAssociate.phone}</span>
                       </div>
                     </div>
                   </div>
@@ -279,6 +257,16 @@ const Tim = () => {
                                 <span>{associate.lokasi}</span>
                               </div>
                             </div>
+                            <div className="mb-4">
+                              <h5 className="text-sm font-semibold mb-2">Pengalaman Kerja:</h5>
+                              <div className="space-y-1 text-xs text-muted-foreground">
+                                {associate.pengalamanKerja.map((exp, expIndex) => (
+                                  <div key={expIndex} className="text-left">
+                                    • {exp}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
                             <div className="flex flex-wrap gap-1 justify-center">
                               {associate.spesialisasi.map((spec, specIndex) => (
                                 <Badge key={specIndex} variant="outline" className="text-xs">
@@ -312,6 +300,16 @@ const Tim = () => {
                               <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground mb-2">
                                 <MapPin className="h-3 w-3" />
                                 <span>{associate.lokasi}</span>
+                              </div>
+                            </div>
+                            <div className="mb-4">
+                              <h5 className="text-sm font-semibold mb-2">Pengalaman Kerja:</h5>
+                              <div className="space-y-1 text-xs text-muted-foreground">
+                                {associate.pengalamanKerja.map((exp, expIndex) => (
+                                  <div key={expIndex} className="text-left">
+                                    • {exp}
+                                  </div>
+                                ))}
                               </div>
                             </div>
                             <div className="flex flex-wrap gap-1 justify-center">
