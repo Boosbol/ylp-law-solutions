@@ -1,3 +1,4 @@
+
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -81,14 +82,16 @@ const Tim = () => {
       posisi: "Associate in Criminal Law",
       spesialisasi: ["Hukum Pidana", "Perlindungan Saksi", "Hukum Acara Pidana"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta"
+      lokasi: "Jakarta",
+      photo: "/lovable-uploads/36eb6974-f30d-45cf-8b4c-02ad45f7881a.png"
     },
     {
       nama: "Indra Sihombing S.H., M.H.",
       posisi: "Associate in Criminal Law", 
       spesialisasi: ["Hukum Pidana", "Hukum Pidana Khusus", "Advokasi"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta"
+      lokasi: "Jakarta",
+      photo: "/lovable-uploads/d5a3f60d-254d-429f-9acc-49b2a851daa8.png"
     },
     {
       nama: "Edina Giawa S.H.",
@@ -293,11 +296,11 @@ const Tim = () => {
                 {associates.map((associate, index) => {
                   let photoSrc = "/placeholder.svg";
                   
-                  // Assign photos based on names
-                  if (associate.nama === "Widjayati S.H., S.Ak") {
+                  // Use the photo property if it exists, otherwise fallback to existing logic
+                  if (associate.photo) {
+                    photoSrc = associate.photo;
+                  } else if (associate.nama === "Widjayati S.H., S.Ak") {
                     photoSrc = "/lovable-uploads/140c4b07-0932-4ce6-a845-8e2fc292c7a1.png";
-                  } else if (associate.nama === "Dhea Arum Saskia S.H., M.H") {
-                    photoSrc = "/lovable-uploads/213c3395-4339-42e8-8397-652fb71f22c9.png";
                   }
                   
                   return (
