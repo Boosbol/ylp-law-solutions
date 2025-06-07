@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -45,7 +44,7 @@ const Tim = () => {
       "Certified Mediator - BANI",
       "Member Indonesian Bar Association"
     ],
-    photo: "/lovable-uploads/776115f4-f18f-477b-b306-32aacaf5ec9f.png"
+    photo: "/lovable-uploads/7dd03baf-4fa3-463b-ab44-fdaa1d8c2159.png"
   };
 
   const partners = [
