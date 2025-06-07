@@ -1,15 +1,12 @@
+
 import Layout from '@/components/Layout';
+import ContactForm from '@/components/ContactForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { 
   MapPin, 
   Phone, 
   Mail, 
   Clock, 
-  MessageSquare,
-  Send,
   Building,
   Car,
   Wifi,
@@ -79,87 +76,7 @@ const Kontak = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl flex items-center">
-                    <MessageSquare className="h-6 w-6 mr-2 text-gold-500" />
-                    Kirim Pesan
-                  </CardTitle>
-                  <p className="text-muted-foreground">
-                    Isi formulir di bawah ini dan tim kami akan segera menghubungi Anda
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="nama">Nama Lengkap *</Label>
-                      <Input id="nama" placeholder="Masukkan nama lengkap" />
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email *</Label>
-                      <Input id="email" type="email" placeholder="nama@email.com" />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="telepon">Nomor Telepon *</Label>
-                      <Input id="telepon" placeholder="+62 xxx xxx xxx" />
-                    </div>
-                    <div>
-                      <Label htmlFor="perusahaan">Perusahaan (Opsional)</Label>
-                      <Input id="perusahaan" placeholder="Nama perusahaan" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="layanan">Jenis Layanan *</Label>
-                    <select className="w-full p-2 border border-input rounded-md">
-                      <option value="">Pilih jenis layanan</option>
-                      <option value="pidana">Hukum Pidana</option>
-                      <option value="perdata">Hukum Perdata</option>
-                      <option value="korporat">Hukum Korporat</option>
-                      <option value="ketenagakerjaan">Hukum Ketenagakerjaan</option>
-                      <option value="properti">Hukum Properti</option>
-                      <option value="mediasi">Mediasi & Arbitrase</option>
-                      <option value="lainnya">Lainnya</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="prioritas">Tingkat Urgensi *</Label>
-                    <select className="w-full p-2 border border-input rounded-md">
-                      <option value="">Pilih tingkat urgensi</option>
-                      <option value="rendah">Rendah (Respon dalam 2-3 hari)</option>
-                      <option value="normal">Normal (Respon dalam 24 jam)</option>
-                      <option value="tinggi">Tinggi (Respon dalam 6 jam)</option>
-                      <option value="darurat">Darurat (Respon dalam 2 jam)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="pesan">Deskripsi Kasus/Kebutuhan *</Label>
-                    <textarea 
-                      id="pesan"
-                      className="w-full p-2 border border-input rounded-md h-32"
-                      placeholder="Jelaskan secara singkat masalah hukum atau kebutuhan Anda..."
-                    />
-                  </div>
-
-                  <div className="flex items-start space-x-2">
-                    <input type="checkbox" id="privacy" className="mt-1" />
-                    <Label htmlFor="privacy" className="text-sm">
-                      Saya menyetujui <a href="#" className="text-gold-600 hover:underline">Kebijakan Privasi</a> dan 
-                      <a href="#" className="text-gold-600 hover:underline"> Syarat & Ketentuan</a>
-                    </Label>
-                  </div>
-
-                  <Button className="w-full bg-gold-500 hover:bg-gold-600">
-                    <Send className="h-4 w-4 mr-2" />
-                    Kirim Pesan
-                  </Button>
-                </CardContent>
-              </Card>
+              <ContactForm />
             </div>
 
             {/* Contact Information */}
