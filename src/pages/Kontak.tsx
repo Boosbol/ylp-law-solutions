@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import ContactForm from '@/components/ContactForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,7 +10,8 @@ import {
   Car,
   Wifi,
   Coffee,
-  Instagram
+  Instagram,
+  ExternalLink
 } from 'lucide-react';
 
 const Kontak = () => {
@@ -23,6 +23,7 @@ const Kontak = () => {
       email: "nin_yasmine@yahoo.co.id",
       jamOperasional: "Senin - Jumat: 08:00 - 17:00 WIB",
       koordinat: "Lippo Cikarang",
+      googleMapsUrl: "https://maps.google.com/?q=Paragon+Business+Park+Blok+B28+V,+Lippo+Cikarang,+Bekasi+17550",
       fasilitas: ["Parking Area", "Free WiFi", "Meeting Room", "Waiting Lounge"]
     },
     {
@@ -32,6 +33,7 @@ const Kontak = () => {
       email: "nin_yasmine@yahoo.co.id",
       jamOperasional: "Senin - Jumat: 09:00 - 17:00 WIB",
       koordinat: "Jakarta Barat",
+      googleMapsUrl: "https://maps.google.com/?q=Jl.+Kebon+Jeruk+XV+No.13,+Kebon+Jeruk,+Jakarta+Barat+11530",
       fasilitas: ["Parking Area", "Free WiFi", "Conference Room", "Coffee Bar"]
     }
   ];
@@ -93,7 +95,19 @@ const Kontak = () => {
                   <CardContent className="space-y-4">
                     <div className="flex items-start space-x-3">
                       <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
-                      <span className="text-sm">{kantor.alamat}</span>
+                      <div className="flex-1">
+                        <span className="text-sm">{kantor.alamat}</span>
+                        <br />
+                        <a 
+                          href={kantor.googleMapsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gold-600 hover:text-gold-700 text-sm inline-flex items-center mt-1 transition-colors"
+                        >
+                          <ExternalLink className="h-3 w-3 mr-1" />
+                          Buka di Google Maps
+                        </a>
+                      </div>
                     </div>
                     
                     <div className="flex items-center space-x-3">
@@ -179,20 +193,24 @@ const Kontak = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-gray-200 rounded-lg h-64 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-12 w-12 text-gray-500 mx-auto mb-2" />
-                <p className="text-gray-600">Kantor Pusat - Lippo Cikarang</p>
-                <p className="text-sm text-gray-500">Interactive Map</p>
+            {informasiKontak.map((kantor, index) => (
+              <div key={index} className="bg-gray-200 rounded-lg h-64 flex items-center justify-center relative overflow-hidden group">
+                <div className="text-center">
+                  <MapPin className="h-12 w-12 text-gray-500 mx-auto mb-2" />
+                  <p className="text-gray-600 font-medium">{kantor.jenis}</p>
+                  <p className="text-sm text-gray-500 mb-3">{kantor.koordinat}</p>
+                  <a 
+                    href={kantor.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center bg-gold-500 hover:bg-gold-600 text-white px-4 py-2 rounded-md text-sm transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Lihat di Google Maps
+                  </a>
+                </div>
               </div>
-            </div>
-            <div className="bg-gray-200 rounded-lg h-64 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-12 w-12 text-gray-500 mx-auto mb-2" />
-                <p className="text-gray-600">Kantor Cabang - Jakarta Barat</p>
-                <p className="text-sm text-gray-500">Interactive Map</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
