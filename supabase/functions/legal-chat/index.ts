@@ -15,52 +15,55 @@ serve(async (req) => {
 
   try {
     const { message } = await req.json();
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
 
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not configured');
+    if (!geminiApiKey) {
+      throw new Error('Gemini API key not configured');
     }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
+        contents: [
           {
-            role: 'system',
-            content: `Anda adalah asisten AI untuk Yasmine Lisasih Law Office & Partners, firma hukum terpercaya di Indonesia. 
+            parts: [
+              {
+                text: `Anda adalah asisten AI untuk Yasmine Lisasih Law Office & Partners, firma hukum terpercaya di Indonesia. 
             
-            Keahlian firma:
-            - Hukum Pidana
-            - Hukum Perdata
-            - Hukum Bisnis
-            - Hukum Keluarga
-            - Hukum Pertanahan
-            - Hukum Pajak
-            - Mediasi & Arbitrase
-            - Konsultasi Hukum
-            
-            Instruksi:
-            1. Berikan informasi umum tentang hukum Indonesia
-            2. Jelaskan layanan yang tersedia di firma
-            3. Sarankan konsultasi langsung untuk kasus spesifik
-            4. Selalu profesional dan informatif
-            5. Jangan memberikan nasihat hukum spesifik
-            6. Gunakan bahasa Indonesia yang formal namun ramah
-            
-            Jika ada pertanyaan yang memerlukan konsultasi mendalam, sarankan untuk menghubungi firma secara langsung.`
-          },
-          {
-            role: 'user',
-            content: message
+Keahlian firma:
+- Hukum Pidana
+- Hukum Perdata
+- Hukum Bisnis
+- Hukum Keluarga
+- Hukum Pertanahan
+- Hukum Pajak
+- Mediasi & Arbitrase
+- Konsultasi Hukum
+
+Instruksi:
+1. Berikan informasi umum tentang hukum Indonesia
+2. Jelaskan layanan yang tersedia di firma
+3. Sarankan konsultasi langsung untuk kasus spesifik
+4. Selalu profesional dan informatif
+5. Jangan memberikan nasihat hukum spesifik
+6. Gunakan bahasa Indonesia yang formal namun ramah
+
+Jika ada pertanyaan yang memerlukan konsultasi mendalam, sarankan untuk menghubungi firma secara langsung.
+
+Pertanyaan pengguna: ${message}`
+              }
+            ]
           }
         ],
-        max_tokens: 500,
-        temperature: 0.7,
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 500,
+        }
       }),
     });
 
@@ -70,7 +73,7 @@ serve(async (req) => {
       throw new Error(data.error?.message || 'Failed to get AI response');
     }
 
-    const aiMessage = data.choices[0].message.content;
+    const aiMessage = data.candidates[0].content.parts[0].text;
 
     return new Response(JSON.stringify({ message: aiMessage }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
