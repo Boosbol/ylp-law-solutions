@@ -10,125 +10,162 @@ import {
   TrendingUp,
   Award,
   Users,
-  DollarSign
+  DollarSign,
+  Scale,
+  FileText,
+  AlertTriangle
 } from 'lucide-react';
 
 const StudiKasus = () => {
   const studiKasus = [
     {
       id: 1,
-      judul: "Penyelesaian Sengketa Korporat Multinasional",
-      kategori: "Hukum Korporat",
-      klien: "PT. Global Manufacturing Indonesia",
-      tahun: "2023",
+      judul: "Kasus Pembunuhan Pedagang Baju Butik Auriell di Karawaci, Tangerang",
+      kategori: "Hukum Pidana",
+      klien: "Keluarga Korban (bekerjasama dengan Hotman 911)",
+      tahun: "2024",
       durasi: "8 bulan",
-      nilaiSengketa: "USD 25 juta",
-      status: "Menang",
-      deskripsi: "Berhasil menyelesaikan sengketa akuisisi perusahaan multinasional dengan hasil yang menguntungkan klien. Kasus ini melibatkan kompleksitas hukum lintas negara dan regulasi investasi asing.",
+      nilaiSengketa: "Kasus Pembunuhan",
+      status: "Banding Disetujui",
+      nomorPerkara: "793/Pid.B/2024/PN.Tng | 106/PID/2024/PT BTN",
+      deskripsi: "Berhasil menangani kasus pembunuhan di Boutique Aurel Mode dengan mendampingi keluarga korban. Terdakwa Nada Diana divonis 15 tahun penjara di Pengadilan Negeri, kemudian dikurangi menjadi 13 tahun di Pengadilan Tinggi Banten.",
       hasil: [
-        "Klien memperoleh kompensasi penuh",
-        "Akuisisi berhasil diselesaikan",
-        "Reputasi perusahaan terjaga",
-        "Hubungan bisnis tetap baik"
+        "Terdakwa terbukti melanggar Pasal 338 KUHP",
+        "Vonis awal 15 tahun penjara (PN Tangerang)",
+        "Vonis banding 13 tahun penjara (PT Banten)",
+        "Proses kasasi sedang berjalan oleh JPU"
       ],
       tantangan: [
-        "Perbedaan sistem hukum antar negara",
-        "Koordinasi dengan tim hukum internasional",
-        "Tekanan waktu yang ketat",
-        "Kompleksitas regulasi investasi"
+        "Kasus pembunuhan dengan korban jiwa",
+        "Proses hukum yang panjang dan kompleks",
+        "Koordinasi dengan Hotman 911",
+        "Dampak emosional pada keluarga korban"
       ],
       solusi: [
-        "Kolaborasi dengan Hotman 911 untuk expertise internasional",
-        "Strategi negosiasi bertahap",
-        "Due diligence menyeluruh",
-        "Mediasi terstruktur"
+        "Pendampingan hukum yang komprehensif",
+        "Koordinasi strategis dengan tim Hotman 911",
+        "Dukungan psikologis untuk keluarga",
+        "Strategi banding yang efektif"
       ]
     },
     {
       id: 2,
-      judul: "Pembelaan Kasus Pidana Korupsi Tingkat Tinggi",
-      kategori: "Hukum Pidana",
-      klien: "Pejabat Pemerintahan (Confidential)",
-      tahun: "2023",
-      durasi: "14 bulan",
-      nilaiSengketa: "IDR 50 miliar",
-      status: "Bebas",
-      deskripsi: "Berhasil membebaskan klien dari tuduhan korupsi dengan nilai kerugian negara 50 miliar rupiah. Kasus ini menjadi perhatian media dan membutuhkan strategi hukum yang sangat hati-hati.",
+      judul: "Gugatan Wanprestasi PT. Vinmix Multi Perkasa",
+      kategori: "Hukum Perdata",
+      klien: "PT. Vinmix Multi Perkasa",
+      tahun: "2024",
+      durasi: "6 bulan",
+      nilaiSengketa: "IDR 326 juta",
+      status: "Mediasi Berhasil",
+      nomorPerkara: "229/Pdt.G/2024/PN.Ckr",
+      deskripsi: "Menyelesaikan sengketa wanprestasi kontrak pengadaan beton senilai 1,3 miliar dengan anggota DPRD Jawa Barat. Kasus diselesaikan melalui mediasi dengan kesepakatan cicilan selama 9 bulan.",
       hasil: [
-        "Klien dinyatakan bebas dari segala tuduhan",
-        "Nama baik klien dipulihkan",
-        "Tidak ada sanksi administratif",
-        "Proses hukum yang fair dan transparan"
+        "Penyelesaian melalui mediasi berhasil",
+        "Akta Perdamaian ditandatangani 13 Januari 2025",
+        "Kesepakatan cicilan Rp 45 juta selama 9 bulan",
+        "Jaminan tanah SHM tetap berlaku"
       ],
       tantangan: [
-        "Tekanan media yang intens",
-        "Kompleksitas alat bukti",
-        "Stakeholder yang beragam",
-        "Proses hukum yang panjang"
+        "Sisa hutang Rp 326 juta dari kontrak 1,3 miliar",
+        "Melibatkan pejabat publik (anggota DPRD)",
+        "Jaminan berupa 2 sertifikat tanah",
+        "Proyek infrastruktur yang terhenti"
       ],
       solusi: [
-        "Strategi komunikasi yang terukur",
-        "Analisis mendalam terhadap alat bukti",
-        "Koordinasi dengan berbagai pihak",
-        "Persiapan yang sangat matang"
+        "Pendekatan mediasi yang konstruktif",
+        "Negosiasi jadwal pembayaran realistis",
+        "Mempertahankan jaminan sebagai pengaman",
+        "Komunikasi yang baik antar pihak"
       ]
     },
     {
       id: 3,
-      judul: "Mediasi Sengketa Tanah Skala Besar",
-      kategori: "Hukum Properti",
-      klien: "Developer Properti Terkemuka",
-      tahun: "2022",
-      durasi: "6 bulan",
-      nilaiSengketa: "IDR 100 miliar",
-      status: "Kesepakatan",
-      deskripsi: "Menyelesaikan sengketa kepemilikan tanah seluas 50 hektar melalui mediasi yang melibatkan multiple stakeholders termasuk masyarakat adat, pemerintah daerah, dan developer.",
+      judul: "Perbuatan Melawan Hukum terhadap PT. J-Group Amanah Wisata Travel",
+      kategori: "Hukum Perdata",
+      klien: "Ir. Djoko Prijo Utomo",
+      tahun: "2024",
+      durasi: "Berlangsung",
+      nilaiSengketa: "IDR 550 juta",
+      status: "Dalam Proses",
+      nomorPerkara: "1103/Pdt.G/PN.Tng",
+      deskripsi: "Menangani gugatan perbuatan melawan hukum terhadap travel haji illegal. Klien telah membayar Rp 550 juta untuk Program Haji Smart Plus yang ternyata tidak memiliki visa haji sesuai regulasi Kemenag.",
       hasil: [
-        "Kesepakatan win-win solution",
-        "Proyek pembangunan dapat dilanjutkan",
-        "Kompensasi yang adil untuk semua pihak",
-        "Hubungan harmonis dengan masyarakat"
+        "Gugatan berhasil didaftarkan ke PN Tangerang",
+        "Mediasi telah dilakukan namun tidak berhasil",
+        "Proses persidangan berlanjut ke tahap pembuktian",
+        "Kasus menjadi perhatian karena melibatkan travel haji illegal"
       ],
       tantangan: [
-        "Multiple stakeholders dengan kepentingan berbeda",
-        "Aspek hukum adat yang kompleks",
-        "Tekanan sosial dan politik",
-        "Nilai ekonomi yang tinggi"
+        "Program haji illegal tanpa visa resmi",
+        "Kerugian finansial yang besar",
+        "Regulasi Kemenag yang kompleks",
+        "Dampak spiritual dan finansial pada klien"
       ],
       solusi: [
-        "Pendekatan mediasi bertahap",
-        "Konsultasi dengan tokoh adat",
-        "Analisis komprehensif aspek hukum",
-        "Negosiasi berkelanjutan"
+        "Analisis mendalam regulasi Kemenag",
+        "Pengumpulan bukti-bukti kuat",
+        "Strategi pembuktian yang sistematis",
+        "Koordinasi dengan instansi terkait"
       ]
     },
     {
       id: 4,
-      judul: "Restrukturisasi Utang Perusahaan PKPU",
-      kategori: "Hukum Korporat",
-      klien: "PT. Industri Tekstil Nusantara",
-      tahun: "2022",
-      durasi: "10 bulan",
-      nilaiSengketa: "IDR 75 miliar",
-      status: "Berhasil",
-      deskripsi: "Membantu perusahaan textil besar menghindari kebangkrutan melalui proses PKPU (Penundaan Kewajiban Pembayaran Utang) dan berhasil melakukan restrukturisasi utang.",
+      judul: "Sengketa Yayasan Pembangunan Pendidikan Jakarta",
+      kategori: "Hukum Pidana",
+      klien: "Yayasan Pembangunan Pendidikan Jakarta",
+      tahun: "2024",
+      durasi: "Berlangsung",
+      nilaiSengketa: "Pemalsuan Dokumen",
+      status: "Dalam Penyelidikan",
+      nomorPerkara: "LP/B/7438/XII/2024/SPKT/POLDA METRO JAYA",
+      deskripsi: "Menangani dugaan tindak pidana pemalsuan sertifikat tanah dan akta perubahan yayasan. Kasus melibatkan pemalsuan dokumen di kantor notaris dan naskah serah terima gedung sekolah dari tahun 1977.",
       hasil: [
-        "Perusahaan terhindar dari kebangkrutan",
-        "Restrukturisasi utang 60% dari nilai awal",
-        "Operasional perusahaan berlanjut",
-        "10.000+ karyawan tetap bekerja"
+        "Laporan polisi berhasil didaftarkan",
+        "Dugaan pemalsuan berdasarkan Pasal 263 KUHP",
+        "Identifikasi lokasi pemalsuan di kantor notaris",
+        "Proses penyelidikan sedang berjalan"
       ],
       tantangan: [
-        "Tekanan dari multiple kreditor",
-        "Kondisi keuangan yang kritis",
-        "Kompleksitas hukum kepailitan",
-        "Dampak sosial yang luas"
+        "Pemalsuan dokumen historis (1977)",
+        "Melibatkan notaris dan pejabat gubernur",
+        "Sengketa kepemilikan lahan dan bangunan",
+        "Kompleksitas hukum administrasi"
       ],
       solusi: [
-        "Strategi negosiasi dengan kreditor",
-        "Rencana bisnis yang realistis",
-        "Koordinasi dengan kurator",
-        "Komunikasi yang transparant"
+        "Analisis forensik dokumen",
+        "Koordinasi dengan pihak kepolisian",
+        "Penelusuran sejarah kepemilikan",
+        "Pendekatan multi-disiplin hukum"
+      ]
+    },
+    {
+      id: 5,
+      judul: "Pengelapan Tagihan Perusahaan di Jakarta Utara",
+      kategori: "Hukum Pidana",
+      klien: "PT. Mitrajasa Joga Sarana",
+      tahun: "2023-2024",
+      durasi: "12 bulan",
+      nilaiSengketa: "Pengelapan Tagihan",
+      status: "Dalam Penyelidikan",
+      nomorPerkara: "LP/B/232/III/2023/SPKT/POLRES METRO JAKUT",
+      deskripsi: "Menangani kasus dugaan pengelapan tagihan perusahaan ekspor-impor container oleh mantan karyawan. Kasus bermula dari file yang dihapus dan ditemukannya tagihan palsu mengatasnamakan perusahaan.",
+      hasil: [
+        "Berhasil mengumpulkan bukti digital dan dokumen",
+        "4 saksi telah diperiksa oleh penyidik",
+        "Dokumen legalitas perusahaan terlengkapi",
+        "Bukti tagihan palsu dan mutasi rekening terkumpul"
+      ],
+      tantangan: [
+        "Penghapusan file digital oleh pelaku",
+        "Tagihan palsu mengatasnamakan perusahaan",
+        "Melibatkan transaksi ekspor-impor",
+        "Kerugian finansial dan reputasi"
+      ],
+      solusi: [
+        "Investigasi forensik digital",
+        "Koordinasi dengan pihak bank",
+        "Pengumpulan bukti transaksi",
+        "Analisis pola pengelapan"
       ]
     }
   ];
@@ -142,19 +179,19 @@ const StudiKasus = () => {
     },
     {
       icon: <TrendingUp className="h-8 w-8 text-gold-500" />,
-      nilai: "IDR 500M+",
+      nilai: "IDR 2M+",
       label: "Total Nilai Kasus",
       deskripsi: "Yang berhasil diselesaikan"
     },
     {
       icon: <Users className="h-8 w-8 text-gold-500" />,
-      nilai: "150+",
+      nilai: "200+",
       label: "Klien Puas",
       deskripsi: "Perusahaan dan individu"
     },
     {
       icon: <CheckCircle className="h-8 w-8 text-gold-500" />,
-      nilai: "200+",
+      nilai: "300+",
       label: "Kasus Selesai",
       deskripsi: "Dalam 2 tahun terakhir"
     }
@@ -211,7 +248,7 @@ const StudiKasus = () => {
               Studi Kasus Terpilih
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Beberapa kasus signifikan yang berhasil kami tangani dengan hasil yang memuaskan
+              Kasus-kasus signifikan yang berhasil kami tangani dengan pendekatan hukum yang komprehensif
             </p>
           </div>
 
@@ -227,8 +264,18 @@ const StudiKasus = () => {
                           {kasus.kategori}
                         </Badge>
                         <Badge 
-                          variant={kasus.status === 'Menang' || kasus.status === 'Bebas' || kasus.status === 'Berhasil' || kasus.status === 'Kesepakatan' ? 'default' : 'secondary'}
-                          className={kasus.status === 'Menang' || kasus.status === 'Bebas' || kasus.status === 'Berhasil' || kasus.status === 'Kesepakatan' ? 'bg-green-500 hover:bg-green-600' : ''}
+                          variant={
+                            kasus.status === 'Mediasi Berhasil' || 
+                            kasus.status === 'Banding Disetujui' || 
+                            kasus.status === 'Berhasil' ? 'default' : 'secondary'
+                          }
+                          className={
+                            kasus.status === 'Mediasi Berhasil' || 
+                            kasus.status === 'Banding Disetujui' || 
+                            kasus.status === 'Berhasil' ? 'bg-green-500 hover:bg-green-600' : 
+                            kasus.status === 'Dalam Proses' || 
+                            kasus.status === 'Dalam Penyelidikan' ? 'bg-blue-500 hover:bg-blue-600' : ''
+                          }
                         >
                           {kasus.status}
                         </Badge>
@@ -237,7 +284,7 @@ const StudiKasus = () => {
                       <h3 className="text-2xl font-bold mb-4">{kasus.judul}</h3>
                       <p className="text-muted-foreground mb-6">{kasus.deskripsi}</p>
                       
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div className="flex items-center space-x-2 text-sm">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           <span>{kasus.tahun}</span>
@@ -247,13 +294,17 @@ const StudiKasus = () => {
                           <span>{kasus.durasi}</span>
                         </div>
                         <div className="flex items-center space-x-2 text-sm">
-                          <DollarSign className="h-4 w-4 text-muted-foreground" />
+                          <Scale className="h-4 w-4 text-muted-foreground" />
                           <span>{kasus.nilaiSengketa}</span>
                         </div>
                         <div className="flex items-center space-x-2 text-sm">
-                          <Users className="h-4 w-4 text-muted-foreground" />
-                          <span>Klien Korporat</span>
+                          <FileText className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-xs">{kasus.nomorPerkara}</span>
                         </div>
+                      </div>
+
+                      <div className="text-sm text-muted-foreground">
+                        <strong>Klien:</strong> {kasus.klien}
                       </div>
                     </div>
 
@@ -276,7 +327,7 @@ const StudiKasus = () => {
                         <ul className="space-y-2">
                           {kasus.tantangan.map((tantangan, tantanganIndex) => (
                             <li key={tantanganIndex} className="flex items-start space-x-2 text-sm">
-                              <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
+                              <AlertTriangle className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
                               <span className="text-muted-foreground">{tantangan}</span>
                             </li>
                           ))}
