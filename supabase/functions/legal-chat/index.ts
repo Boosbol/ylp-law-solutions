@@ -15,10 +15,10 @@ serve(async (req) => {
 
   try {
     const { message } = await req.json();
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
 
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not configured');
+    if (!geminiApiKey) {
+      throw new Error('Gemini API key not configured');
     }
 
     const websiteContext = `
@@ -66,18 +66,15 @@ serve(async (req) => {
     - Warna Emas melambangkan kemurnian niat dan standar emas praktik hukum
     `;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content: `Anda adalah asisten AI cerdas untuk Yasmine Lisasih Law Office & Partners. Anda memiliki pengetahuan lengkap tentang firma hukum ini dan dapat:
+        contents: [{
+          parts: [{
+            text: `Anda adalah asisten AI cerdas untuk Yasmine Lisasih Law Office & Partners. Anda memiliki pengetahuan lengkap tentang firma hukum ini dan dapat:
 
 1. MERINGKAS KONTEN: Memberikan ringkasan layanan, sejarah, dan keunggulan firma
 2. MENJAWAB PERTANYAAN: Memberikan informasi spesifik tentang layanan hukum yang tersedia
@@ -95,15 +92,17 @@ INSTRUKSI RESPONS:
 - Jangan memberikan nasihat hukum spesifik, hanya informasi umum
 - Jika ada pertanyaan di luar keahlian firma, arahkan ke konsultasi langsung
 
+Pertanyaan pengguna: ${message}
+
 Jawab dalam gaya yang profesional namun mudah dipahami.`
-          },
-          {
-            role: 'user',
-            content: message
-          }
-        ],
-        max_tokens: 800,
-        temperature: 0.7,
+          }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 800,
+        }
       }),
     });
 
@@ -113,7 +112,7 @@ Jawab dalam gaya yang profesional namun mudah dipahami.`
       throw new Error(data.error?.message || 'Failed to get AI response');
     }
 
-    const aiMessage = data.choices[0].message.content;
+    const aiMessage = data.candidates[0].content.parts[0].text;
 
     return new Response(JSON.stringify({ message: aiMessage }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
