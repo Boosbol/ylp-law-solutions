@@ -1,4 +1,5 @@
 
+
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -119,7 +120,8 @@ const Tim = () => {
       posisi: "Associate in Tax Law",
       spesialisasi: ["Hukum Pajak", "Perencanaan Pajak", "Sengketa Pajak"],
       pengalaman: "10+ tahun",
-      lokasi: "Jakarta"
+      lokasi: "Jakarta",
+      photo: "/lovable-uploads/9ef8ee53-59c7-4216-a6d8-341e22c48679.png"
     }
   ];
 
@@ -296,11 +298,9 @@ const Tim = () => {
                 {associates.map((associate, index) => {
                   let photoSrc = "/placeholder.svg";
                   
-                  // Use the photo property if it exists, otherwise fallback to existing logic
+                  // Use the photo property if it exists
                   if (associate.photo) {
                     photoSrc = associate.photo;
-                  } else if (associate.nama === "Widjayati S.H., S.Ak") {
-                    photoSrc = "/lovable-uploads/140c4b07-0932-4ce6-a845-8e2fc292c7a1.png";
                   }
                   
                   return (
@@ -346,3 +346,4 @@ const Tim = () => {
 };
 
 export default Tim;
+
