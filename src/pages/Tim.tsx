@@ -1,5 +1,4 @@
 
-
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -46,7 +45,7 @@ const Tim = () => {
       "Certified Mediator - BANI",
       "Member Indonesian Bar Association"
     ],
-    photo: "/lovable-uploads/8f82adfa-9b05-4fb1-81f5-08cf8218474d.png"
+    photo: "/lovable-uploads/776115f4-f18f-477b-b306-32aacaf5ec9f.png"
   };
 
   const partners = [
@@ -218,7 +217,7 @@ const Tim = () => {
                     <CardContent className="p-6">
                       <div className="flex flex-col items-center">
                         <Avatar className="h-28 w-28 mb-4">
-                          <AvatarImage src="/lovable-uploads/6ffe09c6-41e8-4341-b16f-85460fa13661.png" alt={partner.nama} />
+                          <AvatarImage src="/lovable-uploads/2349fbc5-deb1-46dd-9bae-218485f74177.png" alt={partner.nama} />
                           <AvatarFallback className="text-lg">PA</AvatarFallback>
                         </Avatar>
                         <h3 className="text-xl font-bold mb-2">{partner.nama}</h3>
@@ -258,7 +257,7 @@ const Tim = () => {
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center">
                     <Avatar className="h-28 w-28 mb-4">
-                      <AvatarImage src="/lovable-uploads/f569c827-7860-479a-adba-ea13e6312a7c.png" alt={seniorAssociate.nama} />
+                      <AvatarImage src="/lovable-uploads/5cdca76e-df6d-4525-857e-120585253a25.png" alt={seniorAssociate.nama} />
                       <AvatarFallback className="text-lg">AS</AvatarFallback>
                     </Avatar>
                     <h3 className="text-xl font-bold mb-2">{seniorAssociate.nama}</h3>
@@ -343,4 +342,3 @@ const Tim = () => {
 };
 
 export default Tim;
-
