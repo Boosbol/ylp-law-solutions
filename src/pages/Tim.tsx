@@ -1,3 +1,4 @@
+
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -44,7 +45,7 @@ const Tim = () => {
       "Certified Mediator - BANI",
       "Member Indonesian Bar Association"
     ],
-    photo: "/lovable-uploads/776115f4-f18f-477b-b306-32aacaf5ec9f.png"
+    photo: "/lovable-uploads/5cdca76e-df6d-4525-857e-120585253a25.png"
   };
 
   const partners = [
@@ -216,7 +217,7 @@ const Tim = () => {
                     <CardContent className="p-6">
                       <div className="flex flex-col items-center">
                         <Avatar className="h-28 w-28 mb-4">
-                          <AvatarImage src="/lovable-uploads/5cdca76e-df6d-4525-857e-120585253a25.png" alt={partner.nama} />
+                          <AvatarImage src="/lovable-uploads/776115f4-f18f-477b-b306-32aacaf5ec9f.png" alt={partner.nama} />
                           <AvatarFallback className="text-lg">PA</AvatarFallback>
                         </Avatar>
                         <h3 className="text-xl font-bold mb-2">{partner.nama}</h3>
@@ -293,7 +294,10 @@ const Tim = () => {
                     <CardContent className="p-6">
                       <div className="flex flex-col items-center text-center">
                         <Avatar className="h-20 w-20 mb-3">
-                          <AvatarImage src="/placeholder.svg" alt={associate.nama} />
+                          <AvatarImage 
+                            src={associate.nama === "Widjayati S.H., S.Ak" ? "/lovable-uploads/776115f4-f18f-477b-b306-32aacaf5ec9f.png" : "/placeholder.svg"} 
+                            alt={associate.nama} 
+                          />
                           <AvatarFallback className="text-sm">
                             {associate.nama.split(' ').slice(0, 2).map(n => n[0]).join('')}
                           </AvatarFallback>
