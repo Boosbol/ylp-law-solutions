@@ -1,7 +1,7 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { 
   MapPin, 
   Award,
@@ -26,7 +26,8 @@ const Tim = () => {
       "Pengacara Kondang Indonesia",
       "Hotman Paris Show Host",
       "Praktisi Hukum Senior"
-    ]
+    ],
+    photo: "/lovable-uploads/5c42685f-3725-453d-bb8a-cbc5a8049597.png"
   };
 
   const managingPartner = {
@@ -42,7 +43,8 @@ const Tim = () => {
       "Advokat Terbaik Kategori Hukum Pidana 2022",
       "Certified Mediator - BANI",
       "Member Indonesian Bar Association"
-    ]
+    ],
+    photo: "/lovable-uploads/776115f4-f18f-477b-b306-32aacaf5ec9f.png"
   };
 
   const partners = [
@@ -142,9 +144,10 @@ const Tim = () => {
               <Card className="inline-block hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center">
-                    <div className="bg-gray-200 rounded-full h-32 w-32 mx-auto mb-4 flex items-center justify-center">
-                      <span className="text-gray-500 text-sm">Photo</span>
-                    </div>
+                    <Avatar className="h-32 w-32 mb-4">
+                      <AvatarImage src={advisor.photo} alt={advisor.nama} />
+                      <AvatarFallback className="text-2xl">HP</AvatarFallback>
+                    </Avatar>
                     <h3 className="text-2xl font-bold mb-2">{advisor.nama}</h3>
                     <p className="text-gold-600 font-semibold mb-4 text-lg">{advisor.posisi}</p>
                     
@@ -175,9 +178,10 @@ const Tim = () => {
               <Card className="inline-block hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center">
-                    <div className="bg-gray-200 rounded-full h-32 w-32 mx-auto mb-4 flex items-center justify-center">
-                      <span className="text-gray-500 text-sm">Photo</span>
-                    </div>
+                    <Avatar className="h-32 w-32 mb-4">
+                      <AvatarImage src={managingPartner.photo} alt={managingPartner.nama} />
+                      <AvatarFallback className="text-2xl">NY</AvatarFallback>
+                    </Avatar>
                     <h3 className="text-2xl font-bold mb-2">{managingPartner.nama}</h3>
                     <p className="text-gold-600 font-semibold mb-4 text-lg">{managingPartner.posisi}</p>
                     
@@ -211,9 +215,10 @@ const Tim = () => {
                   <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
                       <div className="flex flex-col items-center">
-                        <div className="bg-gray-200 rounded-full h-28 w-28 mx-auto mb-4 flex items-center justify-center">
-                          <span className="text-gray-500 text-sm">Photo</span>
-                        </div>
+                        <Avatar className="h-28 w-28 mb-4">
+                          <AvatarImage src="/lovable-uploads/5cdca76e-df6d-4525-857e-120585253a25.png" alt={partner.nama} />
+                          <AvatarFallback className="text-lg">PA</AvatarFallback>
+                        </Avatar>
                         <h3 className="text-xl font-bold mb-2">{partner.nama}</h3>
                         <p className="text-gold-600 font-semibold mb-4">{partner.posisi}</p>
                         
@@ -250,9 +255,10 @@ const Tim = () => {
               <Card className="inline-block hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-8">
                   <div className="flex flex-col items-center">
-                    <div className="bg-gray-200 rounded-full h-28 w-28 mx-auto mb-4 flex items-center justify-center">
-                      <span className="text-gray-500 text-sm">Photo</span>
-                    </div>
+                    <Avatar className="h-28 w-28 mb-4">
+                      <AvatarImage src="/placeholder.svg" alt={seniorAssociate.nama} />
+                      <AvatarFallback className="text-lg">AS</AvatarFallback>
+                    </Avatar>
                     <h3 className="text-xl font-bold mb-2">{seniorAssociate.nama}</h3>
                     <p className="text-gold-600 font-semibold mb-4">{seniorAssociate.posisi}</p>
                     
@@ -286,9 +292,12 @@ const Tim = () => {
                   <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6">
                       <div className="flex flex-col items-center text-center">
-                        <div className="bg-gray-200 rounded-full h-20 w-20 mx-auto mb-3 flex items-center justify-center">
-                          <span className="text-gray-500 text-xs">Photo</span>
-                        </div>
+                        <Avatar className="h-20 w-20 mb-3">
+                          <AvatarImage src="/placeholder.svg" alt={associate.nama} />
+                          <AvatarFallback className="text-sm">
+                            {associate.nama.split(' ').slice(0, 2).map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
                         <h4 className="text-lg font-semibold mb-2">{associate.nama}</h4>
                         <p className="text-gold-600 font-medium mb-3 text-sm">{associate.posisi}</p>
                         <div className="mb-3">
