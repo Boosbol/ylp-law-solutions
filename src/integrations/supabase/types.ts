@@ -9,152 +9,74 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      categories: {
+      profiles: {
         Row: {
           created_at: string
-          description: string | null
+          email: string
+          full_name: string
           id: string
-          name: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          name: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          name?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      products: {
-        Row: {
-          category_id: string | null
-          created_at: string
-          description: string | null
-          id: string
-          image_url: string | null
           is_active: boolean
-          name: string
-          price: number
-          sku: string | null
-          stock_quantity: number
+          role: Database["public"]["Enums"]["user_role"]
+          store_id: string | null
           updated_at: string
         }
         Insert: {
-          category_id?: string | null
           created_at?: string
-          description?: string | null
-          id?: string
-          image_url?: string | null
+          email: string
+          full_name: string
+          id: string
           is_active?: boolean
+          role?: Database["public"]["Enums"]["user_role"]
+          store_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          role?: Database["public"]["Enums"]["user_role"]
+          store_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_profiles_store"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stores: {
+        Row: {
+          address: string | null
+          created_at: string
+          email: string | null
+          id: string
           name: string
-          price: number
-          sku?: string | null
-          stock_quantity?: number
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name: string
+          phone?: string | null
           updated_at?: string
         }
         Update: {
-          category_id?: string | null
+          address?: string | null
           created_at?: string
-          description?: string | null
+          email?: string | null
           id?: string
-          image_url?: string | null
-          is_active?: boolean
           name?: string
-          price?: number
-          sku?: string | null
-          stock_quantity?: number
+          phone?: string | null
           updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "products_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "categories"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      sale_items: {
-        Row: {
-          created_at: string
-          id: string
-          product_id: string | null
-          quantity: number
-          sale_id: string | null
-          total_price: number
-          unit_price: number
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          product_id?: string | null
-          quantity: number
-          sale_id?: string | null
-          total_price: number
-          unit_price: number
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          product_id?: string | null
-          quantity?: number
-          sale_id?: string | null
-          total_price?: number
-          unit_price?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "sale_items_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sale_items_sale_id_fkey"
-            columns: ["sale_id"]
-            isOneToOne: false
-            referencedRelation: "sales"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      sales: {
-        Row: {
-          created_at: string
-          discount_amount: number
-          id: string
-          payment_method: string
-          status: string
-          tax_amount: number
-          total_amount: number
-        }
-        Insert: {
-          created_at?: string
-          discount_amount?: number
-          id?: string
-          payment_method?: string
-          status?: string
-          tax_amount?: number
-          total_amount: number
-        }
-        Update: {
-          created_at?: string
-          discount_amount?: number
-          id?: string
-          payment_method?: string
-          status?: string
-          tax_amount?: number
-          total_amount?: number
         }
         Relationships: []
       }
@@ -163,10 +85,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      has_role: {
+        Args: {
+          _user_id: string
+          _role: Database["public"]["Enums"]["user_role"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      user_role: "store_owner" | "warehouse_admin" | "shopkeeper"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -281,6 +213,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["store_owner", "warehouse_admin", "shopkeeper"],
+    },
   },
 } as const
