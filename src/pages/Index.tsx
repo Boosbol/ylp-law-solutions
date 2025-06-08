@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -60,12 +59,14 @@ const Index = () => {
                 untuk memberikan solusi hukum terbaik dengan standar internasional.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
-                  className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-3"
-                >
-                  Konsultasi Hukum Gratis
-                </Button>
+                <Link to="/kontak">
+                  <Button 
+                    size="lg" 
+                    className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-3"
+                  >
+                    Konsultasi Hukum Gratis
+                  </Button>
+                </Link>
                 <Button 
                   variant="outline" 
                   size="lg"

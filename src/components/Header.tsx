@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -97,9 +96,11 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Button className="bg-gold-500 hover:bg-gold-600 text-white font-medium px-6 py-2">
-              Konsultasi Gratis
-            </Button>
+            <Link to="/kontak">
+              <Button className="bg-gold-500 hover:bg-gold-600 text-white font-medium px-6 py-2">
+                Konsultasi Gratis
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -146,12 +147,14 @@ const Header = () => {
                 </div>
               </div>
               
-              <Button 
-                className="bg-gold-500 hover:bg-gold-600 text-white w-full mt-4 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Konsultasi Gratis
-              </Button>
+              <Link to="/kontak">
+                <Button 
+                  className="bg-gold-500 hover:bg-gold-600 text-white w-full mt-4 font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Konsultasi Gratis
+                </Button>
+              </Link>
             </nav>
           </div>
         )}
