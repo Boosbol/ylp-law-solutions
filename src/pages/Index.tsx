@@ -67,13 +67,15 @@ const Index = () => {
                     Konsultasi Hukum Gratis
                   </Button>
                 </Link>
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="border-white text-white hover:bg-white hover:text-primary"
-                >
-                  Pelajari Lebih Lanjut
-                </Button>
+                <Link to="/tentang">
+                  <Button 
+                    variant="outline" 
+                    size="lg"
+                    className="border-white text-white hover:bg-white hover:text-primary bg-transparent"
+                  >
+                    Pelajari Lebih Lanjut
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="hidden lg:block">
