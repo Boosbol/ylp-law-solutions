@@ -15,8 +15,8 @@ const Tim = () => {
   const advisor = {
     nama: "Dr. Hotman Paris S.H, M.H",
     posisi: "Advisor",
-    spesialisasi: ["Hukum Pidana", "Hukum Perdata", "Hukum Korporat"],
-    pengalaman: "25+ tahun",
+    spesialisasi: ["Hukum Kepailitan", "Hukum Perdata", "Hukum Bisnis"],
+    pengalaman: "35+ tahun",
     pendidikan: [
       "S1 Hukum - Universitas Indonesia",
       "S2 Hukum - Universitas Gadjah Mada", 
@@ -33,7 +33,7 @@ const Tim = () => {
   const managingPartner = {
     nama: "Nin Yasmine Lisasih S.H, M.H",
     posisi: "Managing Partner",
-    spesialisasi: ["Hukum Pidana", "Hukum Perdata", "Mediasi"],
+    spesialisasi: ["Hukum Bisnis", "Hukum Perdata", "Hukum Pidana"],
     pengalaman: "15+ tahun",
     pendidikan: [
       "S1 Hukum - Universitas Indonesia",
