@@ -1,8 +1,8 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import { 
   Calendar, 
   Clock, 
@@ -364,12 +364,14 @@ const StudiKasus = () => {
             Tim ahli kami siap membantu menyelesaikan kasus hukum Anda 
             dengan strategi yang tepat dan hasil yang optimal
           </p>
-          <Button 
-            size="lg" 
-            className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-3"
-          >
-            Konsultasi Kasus Anda
-          </Button>
+          <Link to="/kontak">
+            <Button 
+              size="lg" 
+              className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-3"
+            >
+              Konsultasi Kasus Anda
+            </Button>
+          </Link>
         </div>
       </section>
     </Layout>
