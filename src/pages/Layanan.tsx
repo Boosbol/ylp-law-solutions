@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -215,23 +214,14 @@ const Layanan = () => {
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Hubungi tim ahli hukum kami untuk konsultasi gratis dan dapatkan solusi terbaik
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/kontak">
-              <Button 
-                size="lg" 
-                className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-3"
-              >
-                Hubungi Kami
-              </Button>
-            </Link>
+          <Link to="/kontak">
             <Button 
-              variant="outline" 
-              size="lg"
-              className="border-white text-white hover:bg-white hover:text-primary"
+              size="lg" 
+              className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-3"
             >
-              Download Brosur
+              Hubungi Kami
             </Button>
-          </div>
+          </Link>
         </div>
       </section>
     </Layout>
