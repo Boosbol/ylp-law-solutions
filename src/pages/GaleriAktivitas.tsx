@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,49 +7,33 @@ import { useState } from 'react';
 const GaleriAktivitas = () => {
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
 
-  // Real photos from uploads
+  // Real photos from uploads with updated dates
   const photos = [
     {
       id: 1,
       src: "/lovable-uploads/249537df-a3c1-40c6-9a3f-a17e498a3df1.png",
       title: "Congratulation for Grand Opening",
       description: "Karangan bunga ucapan selamat pembukaan kantor dari Dr. Hotman Paris S.H., M.Hum",
-      date: "2023-08-17"
+      date: "08-09-2025"
     },
     {
       id: 2,
       src: "/lovable-uploads/f430c6a9-dadb-40dd-b29b-ece45b6367b8.png",
       title: "Grand Opening Kantor",
       description: "Momen pembukaan kantor Yasmine Lisasih Law Office & Partners dengan berbagai karangan bunga dari mitra",
-      date: "2023-08-17"
+      date: "08-09-2025"
     },
     {
       id: 3,
       src: "/lovable-uploads/9f67be4e-6abd-4057-9a8c-0bb3dfa55536.png",
       title: "Karangan Bunga dari Mitra",
       description: "Ucapan selamat grand opening dari Dr. Farhat Abbas, S.H.M.H. (Ketua Partai Pandai Pembela Kaum Lemah)",
-      date: "2023-08-17"
+      date: "08-09-2025"
     }
   ];
 
-  const videos = [
-    {
-      id: 1,
-      thumbnail: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=300&fit=crop",
-      title: "Webinar Hukum Pidana",
-      description: "Penjelasan tentang prosedur hukum pidana",
-      duration: "45:30",
-      date: "2024-01-10"
-    },
-    {
-      id: 2,
-      thumbnail: "https://images.unsplash.com/photo-1500673922987-e212871fec22?w=400&h=300&fit=crop",
-      title: "Tips Hukum Perdata",
-      description: "Panduan praktis hukum perdata",
-      duration: "32:15",
-      date: "2024-01-25"
-    }
-  ];
+  // Empty videos array since no videos were uploaded
+  const videos = [];
 
   const MediaModal = ({ src, onClose }: { src: string; onClose: () => void }) => (
     <div 
@@ -134,31 +117,38 @@ const GaleriAktivitas = () => {
 
               <TabsContent value="videos">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {videos.map((video) => (
-                    <Card 
-                      key={video.id} 
-                      className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
-                    >
-                      <div className="relative overflow-hidden">
-                        <img
-                          src={video.thumbnail}
-                          alt={video.title}
-                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
-                          <Play className="text-white h-12 w-12 group-hover:scale-110 transition-transform duration-300" />
+                  {videos.length === 0 ? (
+                    <div className="col-span-full text-center py-12">
+                      <Video className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                      <p className="text-gray-500 text-lg">Belum ada video yang diupload</p>
+                    </div>
+                  ) : (
+                    videos.map((video) => (
+                      <Card 
+                        key={video.id} 
+                        className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
+                      >
+                        <div className="relative overflow-hidden">
+                          <img
+                            src={video.thumbnail}
+                            alt={video.title}
+                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
+                            <Play className="text-white h-12 w-12 group-hover:scale-110 transition-transform duration-300" />
+                          </div>
+                          <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
+                            {video.duration}
+                          </div>
                         </div>
-                        <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
-                          {video.duration}
-                        </div>
-                      </div>
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-lg mb-2 text-foreground">{video.title}</h3>
-                        <p className="text-muted-foreground text-sm mb-2">{video.description}</p>
-                        <p className="text-xs text-gray-500">{video.date}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        <CardContent className="p-4">
+                          <h3 className="font-semibold text-lg mb-2 text-foreground">{video.title}</h3>
+                          <p className="text-muted-foreground text-sm mb-2">{video.description}</p>
+                          <p className="text-xs text-gray-500">{video.date}</p>
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
@@ -178,12 +168,12 @@ const GaleriAktivitas = () => {
                 <p className="text-muted-foreground">Video</p>
               </div>
               <div>
-                <div className="text-3xl font-bold text-primary mb-2">12</div>
+                <div className="text-3xl font-bold text-primary mb-2">3</div>
                 <p className="text-muted-foreground">Acara</p>
               </div>
               <div>
-                <div className="text-3xl font-bold text-primary mb-2">8</div>
-                <p className="text-muted-foreground">Seminar</p>
+                <div className="text-3xl font-bold text-primary mb-2">1</div>
+                <p className="text-muted-foreground">Grand Opening</p>
               </div>
             </div>
           </div>
