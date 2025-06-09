@@ -9,28 +9,28 @@ import { useState } from 'react';
 const GaleriAktivitas = () => {
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
 
-  // Sample data - akan diganti dengan file yang diupload
+  // Real photos from uploads
   const photos = [
     {
       id: 1,
-      src: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=300&fit=crop",
-      title: "Seminar Hukum Bisnis",
-      description: "Workshop hukum bisnis untuk pengusaha",
-      date: "2024-01-15"
+      src: "/lovable-uploads/249537df-a3c1-40c6-9a3f-a17e498a3df1.png",
+      title: "Congratulation for Grand Opening",
+      description: "Karangan bunga ucapan selamat pembukaan kantor dari Dr. Hotman Paris S.H., M.Hum",
+      date: "2023-08-17"
     },
     {
       id: 2,
-      src: "https://images.unsplash.com/photo-1500673922987-e212871fec22?w=400&h=300&fit=crop",
-      title: "Konsultasi Hukum",
-      description: "Sesi konsultasi dengan klien",
-      date: "2024-01-20"
+      src: "/lovable-uploads/f430c6a9-dadb-40dd-b29b-ece45b6367b8.png",
+      title: "Grand Opening Kantor",
+      description: "Momen pembukaan kantor Yasmine Lisasih Law Office & Partners dengan berbagai karangan bunga dari mitra",
+      date: "2023-08-17"
     },
     {
       id: 3,
-      src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop",
-      title: "Team Meeting",
-      description: "Rapat tim bulanan",
-      date: "2024-02-01"
+      src: "/lovable-uploads/9f67be4e-6abd-4057-9a8c-0bb3dfa55536.png",
+      title: "Karangan Bunga dari Mitra",
+      description: "Ucapan selamat grand opening dari Dr. Farhat Abbas, S.H.M.H. (Ketua Partai Pandai Pembela Kaum Lemah)",
+      date: "2023-08-17"
     },
     {
       id: 4,
