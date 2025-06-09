@@ -9,6 +9,7 @@ import Tentang from "./pages/Tentang";
 import Layanan from "./pages/Layanan";
 import Tim from "./pages/Tim";
 import StudiKasus from "./pages/StudiKasus";
+import GaleriAktivitas from "./pages/GaleriAktivitas";
 import Kontak from "./pages/Kontak";
 import NotFound from "./pages/NotFound";
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/layanan" element={<Layanan />} />
           <Route path="/tim" element={<Tim />} />
           <Route path="/studi-kasus" element={<StudiKasus />} />
+          <Route path="/galeri-aktivitas" element={<GaleriAktivitas />} />
           <Route path="/kontak" element={<Kontak />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

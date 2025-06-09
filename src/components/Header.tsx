@@ -19,6 +19,7 @@ const Header = () => {
     { name: 'Tentang Kami', href: '/tentang' },
     { name: 'Tim', href: '/tim' },
     { name: 'Studi Kasus', href: '/studi-kasus' },
+    { name: 'Galeri Aktivitas', href: '/galeri-aktivitas' },
     { name: 'Kontak', href: '/kontak' },
   ];
 
