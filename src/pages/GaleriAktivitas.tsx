@@ -1,9 +1,8 @@
 
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Image, Video, Upload, Play } from 'lucide-react';
+import { Image, Video, Play } from 'lucide-react';
 import { useState } from 'react';
 
 const GaleriAktivitas = () => {
@@ -31,13 +30,6 @@ const GaleriAktivitas = () => {
       title: "Karangan Bunga dari Mitra",
       description: "Ucapan selamat grand opening dari Dr. Farhat Abbas, S.H.M.H. (Ketua Partai Pandai Pembela Kaum Lemah)",
       date: "2023-08-17"
-    },
-    {
-      id: 4,
-      src: "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=400&h=300&fit=crop",
-      title: "Acara Pelantikan",
-      description: "Pelantikan advokat baru",
-      date: "2024-02-15"
     }
   ];
 
@@ -94,15 +86,6 @@ const GaleriAktivitas = () => {
             <p className="text-xl max-w-3xl mx-auto mb-8 text-gray-200">
               Dokumentasi kegiatan, seminar, dan momen penting Yasmine Lisasih Law Office & Partners
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-gold-500 hover:bg-gold-600 text-white"
-              >
-                <Upload className="mr-2 h-5 w-5" />
-                Upload Media
-              </Button>
-            </div>
           </div>
         </section>
 
