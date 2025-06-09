@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -35,7 +36,7 @@ const Header = () => {
   const isActive = (href: string) => location.pathname === href;
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm border-b">
+    <header className="sticky top-0 z-50 bg-gray-50 shadow-sm border-b border-gray-200">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
@@ -79,7 +80,7 @@ const Header = () => {
                 <span>Layanan</span>
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 bg-white border border-gray-200 shadow-lg">
+              <DropdownMenuContent className="w-56 bg-gray-50 border border-gray-200 shadow-lg">
                 {layananItems.map((item) => (
                   <DropdownMenuItem key={item.name} asChild>
                     <Link 
@@ -115,7 +116,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden pb-4 border-t border-gray-100 mt-4">
+          <div className="lg:hidden pb-4 border-t border-gray-200 mt-4">
             <nav className="flex flex-col space-y-4 pt-4">
               {navigation.map((item) => (
                 <Link
