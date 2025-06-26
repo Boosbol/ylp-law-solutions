@@ -33,6 +33,71 @@ export type Database = {
         }
         Relationships: []
       }
+      case_studies: {
+        Row: {
+          case_number: string
+          category: string
+          challenges: Json
+          client: string
+          created_at: string
+          created_by: string | null
+          description: string
+          dispute_value: string
+          duration: string
+          id: string
+          results: Json
+          solutions: Json
+          status: string
+          title: string
+          updated_at: string
+          year: string
+        }
+        Insert: {
+          case_number: string
+          category: string
+          challenges?: Json
+          client: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          dispute_value: string
+          duration: string
+          id?: string
+          results?: Json
+          solutions?: Json
+          status: string
+          title: string
+          updated_at?: string
+          year: string
+        }
+        Update: {
+          case_number?: string
+          category?: string
+          challenges?: Json
+          client?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          dispute_value?: string
+          duration?: string
+          id?: string
+          results?: Json
+          solutions?: Json
+          status?: string
+          title?: string
+          updated_at?: string
+          year?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_studies_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gallery_photos: {
         Row: {
           created_at: string

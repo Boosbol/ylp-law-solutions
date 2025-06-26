@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Trash2, Plus, LogOut, Users, Images } from 'lucide-react';
+import { Trash2, Plus, LogOut, Users, Images, FileText, Edit2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import UserManagement from '@/components/UserManagement';
 
@@ -28,16 +27,50 @@ interface GalleryPhoto {
   created_at: string;
 }
 
+interface CaseStudy {
+  id: string;
+  title: string;
+  category: string;
+  client: string;
+  year: string;
+  duration: string;
+  dispute_value: string;
+  status: string;
+  case_number: string;
+  description: string;
+  results: string[];
+  challenges: string[];
+  solutions: string[];
+  created_at: string;
+}
+
 const AdminDashboard = () => {
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
+  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isAddCaseDialogOpen, setIsAddCaseDialogOpen] = useState(false);
+  const [editingCase, setEditingCase] = useState<CaseStudy | null>(null);
   const [newPhoto, setNewPhoto] = useState({
     title: '',
     description: '',
     image_url: '',
     date_taken: new Date().toISOString().split('T')[0]
+  });
+  const [newCase, setNewCase] = useState({
+    title: '',
+    category: '',
+    client: '',
+    year: new Date().getFullYear().toString(),
+    duration: '',
+    dispute_value: '',
+    status: '',
+    case_number: '',
+    description: '',
+    results: '',
+    challenges: '',
+    solutions: ''
   });
   const navigate = useNavigate();
 
@@ -53,6 +86,7 @@ const AdminDashboard = () => {
 
     checkAuth();
     fetchPhotos();
+    fetchCaseStudies();
   }, [navigate]);
 
   const fetchPhotos = async () => {
@@ -69,6 +103,25 @@ const AdminDashboard = () => {
       toast({
         title: "Error",
         description: "Gagal mengambil data foto",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const fetchCaseStudies = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('case_studies')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setCaseStudies(data || []);
+    } catch (error) {
+      console.error('Error fetching case studies:', error);
+      toast({
+        title: "Error",
+        description: "Gagal mengambil data studi kasus",
         variant: "destructive",
       });
     } finally {
@@ -142,6 +195,163 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleAddCase = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const { error } = await supabase
+        .from('case_studies')
+        .insert([{
+          title: newCase.title,
+          category: newCase.category,
+          client: newCase.client,
+          year: newCase.year,
+          duration: newCase.duration,
+          dispute_value: newCase.dispute_value,
+          status: newCase.status,
+          case_number: newCase.case_number,
+          description: newCase.description,
+          results: newCase.results.split('\n').filter(r => r.trim()),
+          challenges: newCase.challenges.split('\n').filter(c => c.trim()),
+          solutions: newCase.solutions.split('\n').filter(s => s.trim()),
+          created_by: adminUser?.id
+        }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Berhasil",
+        description: "Studi kasus berhasil ditambahkan",
+      });
+
+      setNewCase({
+        title: '',
+        category: '',
+        client: '',
+        year: new Date().getFullYear().toString(),
+        duration: '',
+        dispute_value: '',
+        status: '',
+        case_number: '',
+        description: '',
+        results: '',
+        challenges: '',
+        solutions: ''
+      });
+      setIsAddCaseDialogOpen(false);
+      fetchCaseStudies();
+    } catch (error) {
+      console.error('Error adding case study:', error);
+      toast({
+        title: "Error",
+        description: "Gagal menambahkan studi kasus",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUpdateCase = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCase) return;
+    
+    try {
+      const { error } = await supabase
+        .from('case_studies')
+        .update({
+          title: newCase.title,
+          category: newCase.category,
+          client: newCase.client,
+          year: newCase.year,
+          duration: newCase.duration,
+          dispute_value: newCase.dispute_value,
+          status: newCase.status,
+          case_number: newCase.case_number,
+          description: newCase.description,
+          results: newCase.results.split('\n').filter(r => r.trim()),
+          challenges: newCase.challenges.split('\n').filter(c => c.trim()),
+          solutions: newCase.solutions.split('\n').filter(s => s.trim()),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', editingCase.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Berhasil",
+        description: "Studi kasus berhasil diperbarui",
+      });
+
+      setEditingCase(null);
+      setNewCase({
+        title: '',
+        category: '',
+        client: '',
+        year: new Date().getFullYear().toString(),
+        duration: '',
+        dispute_value: '',
+        status: '',
+        case_number: '',
+        description: '',
+        results: '',
+        challenges: '',
+        solutions: ''
+      });
+      fetchCaseStudies();
+    } catch (error) {
+      console.error('Error updating case study:', error);
+      toast({
+        title: "Error",
+        description: "Gagal memperbarui studi kasus",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteCase = async (id: string) => {
+    if (!confirm('Apakah Anda yakin ingin menghapus studi kasus ini?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('case_studies')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Berhasil",
+        description: "Studi kasus berhasil dihapus",
+      });
+
+      fetchCaseStudies();
+    } catch (error) {
+      console.error('Error deleting case study:', error);
+      toast({
+        title: "Error",
+        description: "Gagal menghapus studi kasus",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEditCase = (caseStudy: CaseStudy) => {
+    setEditingCase(caseStudy);
+    setNewCase({
+      title: caseStudy.title,
+      category: caseStudy.category,
+      client: caseStudy.client,
+      year: caseStudy.year,
+      duration: caseStudy.duration,
+      dispute_value: caseStudy.dispute_value,
+      status: caseStudy.status,
+      case_number: caseStudy.case_number,
+      description: caseStudy.description,
+      results: caseStudy.results.join('\n'),
+      challenges: caseStudy.challenges.join('\n'),
+      solutions: caseStudy.solutions.join('\n')
+    });
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('adminUser');
     navigate('/admin/login');
@@ -166,10 +376,14 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs defaultValue="gallery" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="gallery">
               <Images className="h-4 w-4 mr-2" />
               Manajemen Galeri
+            </TabsTrigger>
+            <TabsTrigger value="cases">
+              <FileText className="h-4 w-4 mr-2" />
+              Studi Kasus
             </TabsTrigger>
             <TabsTrigger value="users">
               <Users className="h-4 w-4 mr-2" />
@@ -264,6 +478,220 @@ const AdminDashboard = () => {
                 </Card>
               ))}
             </div>
+          </TabsContent>
+
+          <TabsContent value="cases" className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold">Studi Kasus</h2>
+              <Button 
+                onClick={() => setIsAddCaseDialogOpen(true)}
+                className="bg-primary hover:bg-primary/90"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Tambah Studi Kasus
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6">
+              {caseStudies.map((caseStudy) => (
+                <Card key={caseStudy.id} className="group">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-2">{caseStudy.title}</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-4">
+                          <div><strong>Kategori:</strong> {caseStudy.category}</div>
+                          <div><strong>Klien:</strong> {caseStudy.client}</div>
+                          <div><strong>Tahun:</strong> {caseStudy.year}</div>
+                          <div><strong>Status:</strong> {caseStudy.status}</div>
+                        </div>
+                        <p className="text-gray-700 mb-4">{caseStudy.description}</p>
+                      </div>
+                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button
+                          onClick={() => handleEditCase(caseStudy)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          onClick={() => handleDeleteCase(caseStudy.id)}
+                          size="sm"
+                          variant="destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Add/Edit Case Dialog */}
+            <Dialog 
+              open={isAddCaseDialogOpen || editingCase !== null} 
+              onOpenChange={(open) => {
+                if (!open) {
+                  setIsAddCaseDialogOpen(false);
+                  setEditingCase(null);
+                  setNewCase({
+                    title: '',
+                    category: '',
+                    client: '',
+                    year: new Date().getFullYear().toString(),
+                    duration: '',
+                    dispute_value: '',
+                    status: '',
+                    case_number: '',
+                    description: '',
+                    results: '',
+                    challenges: '',
+                    solutions: ''
+                  });
+                }
+              }}
+            >
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>
+                    {editingCase ? 'Edit Studi Kasus' : 'Tambah Studi Kasus Baru'}
+                  </DialogTitle>
+                </DialogHeader>
+                <form onSubmit={editingCase ? handleUpdateCase : handleAddCase} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="title">Judul</Label>
+                      <Input
+                        id="title"
+                        value={newCase.title}
+                        onChange={(e) => setNewCase({...newCase, title: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="category">Kategori</Label>
+                      <Input
+                        id="category"
+                        value={newCase.category}
+                        onChange={(e) => setNewCase({...newCase, category: e.target.value})}
+                        placeholder="Hukum Pidana/Perdata"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="client">Klien</Label>
+                      <Input
+                        id="client"
+                        value={newCase.client}
+                        onChange={(e) => setNewCase({...newCase, client: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="year">Tahun</Label>
+                      <Input
+                        id="year"
+                        value={newCase.year}
+                        onChange={(e) => setNewCase({...newCase, year: e.target.value})}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="duration">Durasi</Label>
+                      <Input
+                        id="duration"
+                        value={newCase.duration}
+                        onChange={(e) => setNewCase({...newCase, duration: e.target.value})}
+                        placeholder="6 bulan"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="dispute_value">Nilai Sengketa</Label>
+                      <Input
+                        id="dispute_value"
+                        value={newCase.dispute_value}
+                        onChange={(e) => setNewCase({...newCase, dispute_value: e.target.value})}
+                        placeholder="IDR 326 juta"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="status">Status</Label>
+                      <Input
+                        id="status"
+                        value={newCase.status}
+                        onChange={(e) => setNewCase({...newCase, status: e.target.value})}
+                        placeholder="Mediasi Berhasil"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="case_number">Nomor Perkara</Label>
+                      <Input
+                        id="case_number"
+                        value={newCase.case_number}
+                        onChange={(e) => setNewCase({...newCase, case_number: e.target.value})}
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="description">Deskripsi</Label>
+                    <Textarea
+                      id="description"
+                      value={newCase.description}
+                      onChange={(e) => setNewCase({...newCase, description: e.target.value})}
+                      rows={4}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="results">Hasil Dicapai (satu per baris)</Label>
+                    <Textarea
+                      id="results"
+                      value={newCase.results}
+                      onChange={(e) => setNewCase({...newCase, results: e.target.value})}
+                      rows={4}
+                      placeholder="Penyelesaian melalui mediasi berhasil&#10;Akta Perdamaian ditandatangani"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="challenges">Tantangan (satu per baris)</Label>
+                    <Textarea
+                      id="challenges"
+                      value={newCase.challenges}
+                      onChange={(e) => setNewCase({...newCase, challenges: e.target.value})}
+                      rows={4}
+                      placeholder="Sisa hutang yang besar&#10;Melibatkan pejabat publik"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="solutions">Solusi (satu per baris)</Label>
+                    <Textarea
+                      id="solutions"
+                      value={newCase.solutions}
+                      onChange={(e) => setNewCase({...newCase, solutions: e.target.value})}
+                      rows={4}
+                      placeholder="Pendekatan mediasi yang konstruktif&#10;Negosiasi jadwal pembayaran"
+                      required
+                    />
+                  </div>
+
+                  <Button type="submit" className="w-full">
+                    {editingCase ? 'Perbarui Studi Kasus' : 'Tambah Studi Kasus'}
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
           </TabsContent>
           
           <TabsContent value="users">
