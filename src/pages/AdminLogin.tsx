@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -135,10 +134,6 @@ const AdminLogin = () => {
               {loading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
-          <div className="mt-4 text-sm text-gray-600 text-center">
-            <p>Default: admin@yasminelisasih.com / admin123</p>
-            <p>Or: learntofly844@gmail.com / admin123</p>
-          </div>
         </CardContent>
       </Card>
     </div>
