@@ -20,6 +20,8 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
+      console.log('Attempting login with email:', email);
+      
       // Get admin user by email
       const { data: adminUser, error } = await supabase
         .from('admin_users')
@@ -27,7 +29,10 @@ const AdminLogin = () => {
         .eq('email', email)
         .single();
 
+      console.log('Database query result:', { adminUser, error });
+
       if (error || !adminUser) {
+        console.log('User not found or error:', error);
         toast({
           title: "Error",
           description: "Email atau password salah",
@@ -36,8 +41,13 @@ const AdminLogin = () => {
         return;
       }
 
+      console.log('Found user, checking password...');
+      console.log('Stored hash:', adminUser.password_hash);
+      console.log('Input password:', password);
+
       // Verify password
       const isValidPassword = await bcrypt.compare(password, adminUser.password_hash);
+      console.log('Password verification result:', isValidPassword);
       
       if (!isValidPassword) {
         toast({
@@ -118,6 +128,7 @@ const AdminLogin = () => {
           </form>
           <div className="mt-4 text-sm text-gray-600 text-center">
             <p>Default: admin@yasminelisasih.com / admin123</p>
+            <p>Or: learntofly844@gmail.com / admin123</p>
           </div>
         </CardContent>
       </Card>
