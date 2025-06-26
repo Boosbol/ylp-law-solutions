@@ -3,20 +3,8 @@ import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { 
-  Calendar, 
-  Clock, 
-  CheckCircle, 
-  TrendingUp,
-  Award,
-  Users,
-  DollarSign,
-  Scale,
-  FileText,
-  AlertTriangle
-} from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { Calendar, MapPin, Gavel, CheckCircle, AlertTriangle, Lightbulb } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface CaseStudy {
@@ -37,7 +25,7 @@ interface CaseStudy {
 }
 
 const StudiKasus = () => {
-  const [studiKasus, setStudiKasus] = useState<CaseStudy[]>([]);
+  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -51,8 +39,20 @@ const StudiKasus = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setStudiKasus(data || []);
+      if (error) {
+        console.error('Error fetching case studies:', error);
+        return;
+      }
+
+      // Transform the data to match our interface
+      const transformedData = data?.map(item => ({
+        ...item,
+        results: Array.isArray(item.results) ? item.results : [],
+        challenges: Array.isArray(item.challenges) ? item.challenges : [],
+        solutions: Array.isArray(item.solutions) ? item.solutions : []
+      })) || [];
+      
+      setCaseStudies(transformedData);
     } catch (error) {
       console.error('Error fetching case studies:', error);
     } finally {
@@ -60,40 +60,15 @@ const StudiKasus = () => {
     }
   };
 
-  const statistik = [
-    {
-      icon: <Award className="h-8 w-8 text-gold-500" />,
-      nilai: "98%",
-      label: "Tingkat Keberhasilan",
-      deskripsi: "Dari semua kasus yang ditangani"
-    },
-    {
-      icon: <TrendingUp className="h-8 w-8 text-gold-500" />,
-      nilai: "IDR 2M+",
-      label: "Total Nilai Kasus",
-      deskripsi: "Yang berhasil diselesaikan"
-    },
-    {
-      icon: <Users className="h-8 w-8 text-gold-500" />,
-      nilai: "200+",
-      label: "Klien Puas",
-      deskripsi: "Perusahaan dan individu"
-    },
-    {
-      icon: <CheckCircle className="h-8 w-8 text-gold-500" />,
-      nilai: "300+",
-      label: "Kasus Selesai",
-      deskripsi: "Dalam 2 tahun terakhir"
-    }
-  ];
-
   if (loading) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
-            <p className="mt-4 text-lg">Memuat studi kasus...</p>
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-gray-600">Memuat studi kasus...</p>
+            </div>
           </div>
         </div>
       </Layout>
@@ -102,189 +77,143 @@ const StudiKasus = () => {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-primary to-gray-900 text-white">
+      <div className="bg-gradient-to-r from-primary to-primary/80 text-white py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Studi Kasus & Pencapaian
-            </h1>
-            <p className="text-xl text-gray-200">
-              Lihat bagaimana kami berhasil menyelesaikan kasus-kasus kompleks 
-              dan memberikan hasil terbaik untuk klien
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Statistics */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {statistik.map((stat, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
-                <CardContent className="p-6">
-                  <div className="flex justify-center mb-4">
-                    {stat.icon}
-                  </div>
-                  <h3 className="text-3xl font-bold text-primary mb-2">
-                    {stat.nilai}
-                  </h3>
-                  <h4 className="text-lg font-semibold mb-2">
-                    {stat.label}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    {stat.deskripsi}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Case Studies */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Studi Kasus Terpilih
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Kasus-kasus signifikan yang berhasil kami tangani dengan pendekatan hukum yang komprehensif
-            </p>
-          </div>
-
-          {studiKasus.length === 0 ? (
-            <div className="text-center py-20">
-              <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">Belum Ada Studi Kasus</h3>
-              <p className="text-gray-500">Studi kasus akan ditampilkan di sini setelah ditambahkan oleh admin.</p>
-            </div>
-          ) : (
-            <div className="space-y-12">
-              {studiKasus.map((kasus, index) => (
-                <Card key={kasus.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="p-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                      {/* Main Info */}
-                      <div className="lg:col-span-2">
-                        <div className="flex flex-wrap items-center gap-4 mb-4">
-                          <Badge variant="default" className="bg-gold-500 hover:bg-gold-600">
-                            {kasus.category}
-                          </Badge>
-                          <Badge 
-                            variant={
-                              kasus.status === 'Mediasi Berhasil' || 
-                              kasus.status === 'Banding Disetujui' || 
-                              kasus.status === 'Berhasil' ? 'default' : 'secondary'
-                            }
-                            className={
-                              kasus.status === 'Mediasi Berhasil' || 
-                              kasus.status === 'Banding Disetujui' || 
-                              kasus.status === 'Berhasil' ? 'bg-green-500 hover:bg-green-600' : 
-                              kasus.status === 'Dalam Proses' || 
-                              kasus.status === 'Dalam Penyelidikan' ? 'bg-blue-500 hover:bg-blue-600' : ''
-                            }
-                          >
-                            {kasus.status}
-                          </Badge>
-                        </div>
-                        
-                        <h3 className="text-2xl font-bold mb-4">{kasus.title}</h3>
-                        <p className="text-muted-foreground mb-6">{kasus.description}</p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                          <div className="flex items-center space-x-2 text-sm">
-                            <Calendar className="h-4 w-4 text-muted-foreground" />
-                            <span>{kasus.year}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm">
-                            <Clock className="h-4 w-4 text-muted-foreground" />
-                            <span>{kasus.duration}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm">
-                            <Scale className="h-4 w-4 text-muted-foreground" />
-                            <span>{kasus.dispute_value}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm">
-                            <FileText className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-xs">{kasus.case_number}</span>
-                          </div>
-                        </div>
-
-                        <div className="text-sm text-muted-foreground">
-                          <strong>Klien:</strong> {kasus.client}
-                        </div>
-                      </div>
-
-                      {/* Details */}
-                      <div className="space-y-6">
-                        <div>
-                          <h4 className="font-semibold mb-3 text-green-600">Hasil Dicapai</h4>
-                          <ul className="space-y-2">
-                            {kasus.results.map((hasil, hasilIndex) => (
-                              <li key={hasilIndex} className="flex items-start space-x-2 text-sm">
-                                <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                                <span>{hasil}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div>
-                          <h4 className="font-semibold mb-3 text-orange-600">Tantangan</h4>
-                          <ul className="space-y-2">
-                            {kasus.challenges.map((tantangan, tantanganIndex) => (
-                              <li key={tantanganIndex} className="flex items-start space-x-2 text-sm">
-                                <AlertTriangle className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
-                                <span className="text-muted-foreground">{tantangan}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div>
-                          <h4 className="font-semibold mb-3 text-blue-600">Solusi</h4>
-                          <ul className="space-y-2">
-                            {kasus.solutions.map((solusi, solusiIndex) => (
-                              <li key={solusiIndex} className="flex items-start space-x-2 text-sm">
-                                <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                                <span className="text-muted-foreground">{solusi}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-primary text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Butuh Bantuan Hukum Serupa?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Tim ahli kami siap membantu menyelesaikan kasus hukum Anda 
-            dengan strategi yang tepat dan hasil yang optimal
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Studi Kasus</h1>
+          <p className="text-xl opacity-90 max-w-2xl">
+            Pengalaman nyata dalam menangani berbagai kasus hukum dengan hasil yang memuaskan
           </p>
-          <Link to="/kontak">
-            <Button 
-              size="lg" 
-              className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-3"
-            >
-              Konsultasi Kasus Anda
-            </Button>
-          </Link>
         </div>
-      </section>
+      </div>
+
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid gap-8">
+          {caseStudies.map((caseStudy) => (
+            <Card key={caseStudy.id} className="shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader className="pb-4">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex-1">
+                    <CardTitle className="text-2xl mb-2">{caseStudy.title}</CardTitle>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="secondary" className="text-sm">
+                        {caseStudy.category}
+                      </Badge>
+                      <Badge variant="outline" className="text-sm">
+                        {caseStudy.status}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              
+              <CardContent className="space-y-6">
+                {/* Case Details */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="text-sm text-gray-600">Klien</p>
+                      <p className="font-medium">{caseStudy.client}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="text-sm text-gray-600">Tahun</p>
+                      <p className="font-medium">{caseStudy.year}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="text-sm text-gray-600">Durasi</p>
+                      <p className="font-medium">{caseStudy.duration}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Gavel className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="text-sm text-gray-600">Nilai Sengketa</p>
+                      <p className="font-medium">{caseStudy.dispute_value}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Case Number */}
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-sm text-blue-600 font-medium">Nomor Perkara:</p>
+                  <p className="text-blue-800 font-mono text-sm">{caseStudy.case_number}</p>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Ringkasan Kasus</h3>
+                  <p className="text-gray-700 leading-relaxed">{caseStudy.description}</p>
+                </div>
+
+                <Separator />
+
+                {/* Results, Challenges, Solutions */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Results */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                      <h3 className="text-lg font-semibold text-green-700">Hasil Dicapai</h3>
+                    </div>
+                    <ul className="space-y-2">
+                      {caseStudy.results.map((result, index) => (
+                        <li key={index} className="flex items-start gap-2 text-sm">
+                          <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span>{result}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Challenges */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <AlertTriangle className="h-5 w-5 text-amber-600" />
+                      <h3 className="text-lg font-semibold text-amber-700">Tantangan</h3>
+                    </div>
+                    <ul className="space-y-2">
+                      {caseStudy.challenges.map((challenge, index) => (
+                        <li key={index} className="flex items-start gap-2 text-sm">
+                          <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span>{challenge}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Solutions */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Lightbulb className="h-5 w-5 text-blue-600" />
+                      <h3 className="text-lg font-semibold text-blue-700">Solusi</h3>
+                    </div>
+                    <ul className="space-y-2">
+                      {caseStudy.solutions.map((solution, index) => (
+                        <li key={index} className="flex items-start gap-2 text-sm">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span>{solution}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {caseStudies.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-600 text-lg">Belum ada studi kasus yang tersedia.</p>
+          </div>
+        )}
+      </div>
     </Layout>
   );
 };

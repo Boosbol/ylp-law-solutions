@@ -116,7 +116,16 @@ const AdminDashboard = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setCaseStudies(data || []);
+      
+      // Transform the data to match our interface
+      const transformedData = data?.map(item => ({
+        ...item,
+        results: Array.isArray(item.results) ? item.results : [],
+        challenges: Array.isArray(item.challenges) ? item.challenges : [],
+        solutions: Array.isArray(item.solutions) ? item.solutions : []
+      })) || [];
+      
+      setCaseStudies(transformedData);
     } catch (error) {
       console.error('Error fetching case studies:', error);
       toast({
