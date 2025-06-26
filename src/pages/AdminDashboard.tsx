@@ -117,12 +117,12 @@ const AdminDashboard = () => {
 
       if (error) throw error;
       
-      // Transform the data to match our interface
-      const transformedData = data?.map(item => ({
+      // Transform the data to match our interface with proper type conversion
+      const transformedData: CaseStudy[] = data?.map(item => ({
         ...item,
-        results: Array.isArray(item.results) ? item.results : [],
-        challenges: Array.isArray(item.challenges) ? item.challenges : [],
-        solutions: Array.isArray(item.solutions) ? item.solutions : []
+        results: Array.isArray(item.results) ? item.results.map(String) : [],
+        challenges: Array.isArray(item.challenges) ? item.challenges.map(String) : [],
+        solutions: Array.isArray(item.solutions) ? item.solutions.map(String) : []
       })) || [];
       
       setCaseStudies(transformedData);
