@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,7 +8,8 @@ import {
   Briefcase, 
   Handshake,
   Gavel,
-  FileText
+  FileText,
+  Settings
 } from 'lucide-react';
 import Layout from '@/components/Layout';
 
@@ -182,7 +184,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-white">
+      <section className="py-20 bg-primary text-white relative">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Butuh Bantuan Hukum Profesional?
@@ -198,6 +200,17 @@ const Index = () => {
             >
               Hubungi Kami Sekarang
             </Button>
+          </Link>
+        </div>
+        
+        {/* Subtle Admin Login Link */}
+        <div className="absolute bottom-4 right-4">
+          <Link 
+            to="/admin/login" 
+            className="text-gray-400 hover:text-gray-300 transition-colors opacity-50 hover:opacity-100"
+            title="Admin Login"
+          >
+            <Settings className="h-4 w-4" />
           </Link>
         </div>
       </section>
