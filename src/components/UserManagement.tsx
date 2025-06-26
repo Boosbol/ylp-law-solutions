@@ -27,6 +27,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [newUser, setNewUser] = useState({
     name: '',
     email: '',
@@ -39,12 +40,19 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
 
   const fetchUsers = async () => {
     try {
+      console.log('Fetching admin users...');
       const { data, error } = await supabase
         .from('admin_users')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      console.log('Fetch result:', { data, error });
+
+      if (error) {
+        console.error('Error fetching users:', error);
+        throw error;
+      }
+      
       setUsers(data || []);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -61,19 +69,44 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (submitting) return;
+    setSubmitting(true);
+    
     try {
+      console.log('Adding new user:', { name: newUser.name, email: newUser.email });
+      
       // Hash password
       const passwordHash = await bcrypt.hash(newUser.password, 10);
       
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('admin_users')
         .insert([{
           name: newUser.name,
           email: newUser.email,
           password_hash: passwordHash
-        }]);
+        }])
+        .select()
+        .single();
 
-      if (error) throw error;
+      console.log('Insert result:', { data, error });
+
+      if (error) {
+        console.error('Insert error:', error);
+        if (error.code === '23505') {
+          toast({
+            title: "Error",
+            description: "Email sudah digunakan oleh user lain",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: `Gagal menambahkan user admin: ${error.message}`,
+            variant: "destructive",
+          });
+        }
+        return;
+      }
 
       toast({
         title: "Berhasil",
@@ -90,11 +123,18 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
         description: "Gagal menambahkan user admin",
         variant: "destructive",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleUpdateUser = async (userId: string, updates: { name?: string; email?: string; password?: string }) => {
+    if (submitting) return;
+    setSubmitting(true);
+
     try {
+      console.log('Updating user:', userId, updates);
+      
       const updateData: any = {};
       
       if (updates.name) updateData.name = updates.name;
@@ -108,7 +148,25 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
         .update(updateData)
         .eq('id', userId);
 
-      if (error) throw error;
+      console.log('Update result:', { error });
+
+      if (error) {
+        console.error('Update error:', error);
+        if (error.code === '23505') {
+          toast({
+            title: "Error",
+            description: "Email sudah digunakan oleh user lain",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: `Gagal mengupdate data user: ${error.message}`,
+            variant: "destructive",
+          });
+        }
+        return;
+      }
 
       toast({
         title: "Berhasil",
@@ -124,6 +182,8 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
         description: "Gagal mengupdate data user",
         variant: "destructive",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -139,13 +199,23 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
 
     if (!confirm('Apakah Anda yakin ingin menghapus user ini?')) return;
 
+    if (submitting) return;
+    setSubmitting(true);
+
     try {
+      console.log('Deleting user:', userId);
+      
       const { error } = await supabase
         .from('admin_users')
         .delete()
         .eq('id', userId);
 
-      if (error) throw error;
+      console.log('Delete result:', { error });
+
+      if (error) {
+        console.error('Delete error:', error);
+        throw error;
+      }
 
       toast({
         title: "Berhasil",
@@ -160,11 +230,22 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
         description: "Gagal menghapus user",
         variant: "destructive",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center p-8">Loading...</div>;
+    return (
+      <Card>
+        <CardContent className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-gray-600">Memuat data user...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
@@ -173,7 +254,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
         <CardTitle>Manajemen User Admin</CardTitle>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-primary/90">
+            <Button className="bg-primary hover:bg-primary/90" disabled={submitting}>
               <Plus className="h-4 w-4 mr-2" />
               Tambah User
             </Button>
@@ -190,6 +271,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                   value={newUser.name}
                   onChange={(e) => setNewUser({...newUser, name: e.target.value})}
                   required
+                  disabled={submitting}
                 />
               </div>
               <div>
@@ -200,6 +282,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                   value={newUser.email}
                   onChange={(e) => setNewUser({...newUser, email: e.target.value})}
                   required
+                  disabled={submitting}
                 />
               </div>
               <div>
@@ -211,10 +294,11 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                   onChange={(e) => setNewUser({...newUser, password: e.target.value})}
                   required
                   minLength={6}
+                  disabled={submitting}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Tambah User
+              <Button type="submit" className="w-full" disabled={submitting}>
+                {submitting ? 'Menambahkan...' : 'Tambah User'}
               </Button>
             </form>
           </DialogContent>
@@ -240,6 +324,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                       value={editingUser.name}
                       onChange={(e) => setEditingUser({...editingUser, name: e.target.value})}
                       className="w-full"
+                      disabled={submitting}
                     />
                   ) : (
                     <span className={user.id === currentUserId ? 'font-semibold text-primary' : ''}>
@@ -254,6 +339,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                       value={editingUser.email}
                       onChange={(e) => setEditingUser({...editingUser, email: e.target.value})}
                       className="w-full"
+                      disabled={submitting}
                     />
                   ) : (
                     user.email
@@ -273,6 +359,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                             email: editingUser.email
                           })}
                           className="bg-green-500 hover:bg-green-600"
+                          disabled={submitting}
                         >
                           <Check className="h-4 w-4" />
                         </Button>
@@ -280,6 +367,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                           size="sm"
                           variant="outline"
                           onClick={() => setEditingUser(null)}
+                          disabled={submitting}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -290,6 +378,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                           size="sm"
                           variant="outline"
                           onClick={() => setEditingUser(user)}
+                          disabled={submitting}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -298,6 +387,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                             size="sm"
                             variant="destructive"
                             onClick={() => handleDeleteUser(user.id)}
+                            disabled={submitting}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
