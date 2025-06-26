@@ -1,12 +1,13 @@
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { ArrowLeft } from 'lucide-react';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -82,6 +83,17 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      {/* Back to Main Site Navigation */}
+      <div className="absolute top-4 left-4">
+        <Link 
+          to="/" 
+          className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          <span>Kembali ke Situs Utama</span>
+        </Link>
+      </div>
+
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <img 
