@@ -2,35 +2,41 @@
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Image } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+
+interface GalleryPhoto {
+  id: string;
+  title: string;
+  description: string | null;
+  image_url: string;
+  date_taken: string;
+}
 
 const GaleriAktivitas = () => {
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Real photos from uploads with updated dates
-  const photos = [
-    {
-      id: 1,
-      src: "/lovable-uploads/249537df-a3c1-40c6-9a3f-a17e498a3df1.png",
-      title: "Congratulation for Grand Opening",
-      description: "Karangan bunga ucapan selamat pembukaan kantor dari Dr. Hotman Paris S.H., M.Hum",
-      date: "08-09-2025"
-    },
-    {
-      id: 2,
-      src: "/lovable-uploads/f430c6a9-dadb-40dd-b29b-ece45b6367b8.png",
-      title: "Grand Opening Kantor",
-      description: "Momen pembukaan kantor Yasmine Lisasih Law Office & Partners dengan berbagai karangan bunga dari mitra",
-      date: "08-09-2025"
-    },
-    {
-      id: 3,
-      src: "/lovable-uploads/9f67be4e-6abd-4057-9a8c-0bb3dfa55536.png",
-      title: "Karangan Bunga dari Mitra",
-      description: "Ucapan selamat grand opening dari Dr. Farhat Abbas, S.H.M.H. (Ketua Partai Pandai Pembela Kaum Lemah)",
-      date: "08-09-2025"
+  useEffect(() => {
+    fetchPhotos();
+  }, []);
+
+  const fetchPhotos = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('gallery_photos')
+        .select('*')
+        .order('date_taken', { ascending: false });
+
+      if (error) throw error;
+      setPhotos(data || []);
+    } catch (error) {
+      console.error('Error fetching photos:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const MediaModal = ({ src, onClose }: { src: string; onClose: () => void }) => (
     <div 
@@ -72,31 +78,39 @@ const GaleriAktivitas = () => {
         {/* Gallery Content */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {photos.map((photo) => (
-                <Card 
-                  key={photo.id} 
-                  className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
-                  onClick={() => setSelectedMedia(photo.src)}
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={photo.src}
-                      alt={photo.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                      <Image className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-8 w-8" />
+            {loading ? (
+              <div className="text-center py-8">
+                <p>Memuat galeri...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {photos.map((photo) => (
+                  <Card 
+                    key={photo.id} 
+                    className="group cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden"
+                    onClick={() => setSelectedMedia(photo.image_url)}
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={photo.image_url}
+                        alt={photo.title}
+                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                        <Image className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-8 w-8" />
+                      </div>
                     </div>
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold text-lg mb-2 text-foreground">{photo.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-2">{photo.description}</p>
-                    <p className="text-xs text-gray-500">{photo.date}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    <CardContent className="p-4">
+                      <h3 className="font-semibold text-lg mb-2 text-foreground">{photo.title}</h3>
+                      <p className="text-muted-foreground text-sm mb-2">{photo.description}</p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(photo.date_taken).toLocaleDateString('id-ID')}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -109,7 +123,9 @@ const GaleriAktivitas = () => {
                 <p className="text-muted-foreground">Foto</p>
               </div>
               <div>
-                <div className="text-3xl font-bold text-primary mb-2">3</div>
+                <div className="text-3xl font-bold text-primary mb-2">
+                  {new Set(photos.map(p => p.date_taken)).size}
+                </div>
                 <p className="text-muted-foreground">Acara</p>
               </div>
               <div>
