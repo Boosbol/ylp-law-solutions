@@ -183,46 +183,28 @@ const AdminDashboard = () => {
     try {
       console.log('Starting photo upload process...');
       
-      // Create a unique filename
-      const timestamp = Date.now();
-      const randomString = Math.random().toString(36).substring(2, 15);
-      const fileExtension = selectedFile.name.split('.').pop() || 'jpg';
-      const fileName = `${timestamp}-${randomString}.${fileExtension}`;
-      
-      console.log('Uploading file to Supabase Storage:', fileName);
+      // Convert file to base64 for direct database storage
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          // Remove the data:image/jpeg;base64, part to store only the base64 string
+          const base64Data = result.split(',')[1];
+          resolve(base64Data);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(selectedFile);
+      });
 
-      // Upload file to Supabase Storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('gallery-photos')
-        .upload(fileName, selectedFile, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      console.log('File converted to base64, saving to database...');
 
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw uploadError;
-      }
-
-      console.log('File uploaded successfully:', uploadData);
-
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from('gallery-photos')
-        .getPublicUrl(fileName);
-
-      const publicUrl = urlData.publicUrl;
-      console.log('Public URL:', publicUrl);
-      
-      console.log('Saving photo with URL:', publicUrl);
-
-      // Save photo data to database
+      // Save photo data directly to database with base64 data
       const { error: dbError } = await supabase
         .from('gallery_photos')
         .insert([{
           title: newPhoto.title,
           description: newPhoto.description || null,
-          image_url: publicUrl,
+          image_url: `data:${selectedFile.type};base64,${base64}`,
           date_taken: newPhoto.date_taken,
           uploaded_by: adminUser?.id
         }]);
@@ -231,6 +213,8 @@ const AdminDashboard = () => {
         console.error('Database insert error:', dbError);
         throw dbError;
       }
+
+      console.log('Photo saved successfully to database');
 
       toast({
         title: "Berhasil",
@@ -262,27 +246,7 @@ const AdminDashboard = () => {
     if (!confirm('Apakah Anda yakin ingin menghapus foto ini?')) return;
 
     try {
-      // Get photo data to delete from storage
-      const photo = photos.find(p => p.id === id);
-      
-      if (photo && photo.image_url.includes('gallery-photos')) {
-        // Extract filename from URL for deletion
-        const urlParts = photo.image_url.split('/');
-        const fileName = urlParts[urlParts.length - 1];
-        
-        console.log('Deleting file from storage:', fileName);
-        
-        // Delete from storage
-        const { error: storageError } = await supabase.storage
-          .from('gallery-photos')
-          .remove([fileName]);
-          
-        if (storageError) {
-          console.error('Storage delete error:', storageError);
-        }
-      }
-
-      // Delete from database
+      // Delete from database (no need to delete from storage since we're storing base64 in DB)
       const { error } = await supabase
         .from('gallery_photos')
         .delete()
