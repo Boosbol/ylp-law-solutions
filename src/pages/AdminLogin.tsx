@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { ArrowLeft } from 'lucide-react';
+import bcrypt from 'bcryptjs';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -40,13 +42,13 @@ const AdminLogin = () => {
         return;
       }
 
-      // For now, let's use simple password verification to get you logged in
-      // Check if password is 'admin123' for the allowed admin emails
-      const validEmails = ['admin@yasminelisasih.com', 'learntofly844@gmail.com'];
-      const isValidCredentials = validEmails.includes(email) && password === 'admin123';
+      // Verify password using bcrypt
+      const isPasswordValid = await bcrypt.compare(password, adminUser.password_hash);
+      
+      console.log('Password verification result:', isPasswordValid);
 
-      if (!isValidCredentials) {
-        console.log('Invalid credentials');
+      if (!isPasswordValid) {
+        console.log('Invalid password');
         toast({
           title: "Error",
           description: "Email atau password salah",
