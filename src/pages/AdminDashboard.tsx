@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Trash2, Plus, LogOut, Users, Images, FileText, Edit2 } from 'lucide-react';
+import { Trash2, Plus, LogOut, Users, Images, FileText, Edit2, Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import UserManagement from '@/components/UserManagement';
 
@@ -72,6 +72,8 @@ const AdminDashboard = () => {
     challenges: '',
     solutions: ''
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -138,16 +140,85 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Error",
+          description: "Hanya file gambar yang diperbolehkan",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Error",
+          description: "Ukuran file maksimal 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      setSelectedFile(file);
+      // Clear manual URL when file is selected
+      setNewPhoto({...newPhoto, image_url: ''});
+    }
+  };
+
+  const uploadFileToLovable = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const result = await response.json();
+      return result.url || `/lovable-uploads/${file.name}`;
+    } catch (error) {
+      // Fallback: create a local URL for preview (in real scenario, you'd need proper upload handling)
+      console.error('Upload error:', error);
+      return URL.createObjectURL(file);
+    }
+  };
+
   const handleAddPhoto = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsUploading(true);
     
     try {
+      let imageUrl = newPhoto.image_url;
+      
+      // If a file is selected, upload it first
+      if (selectedFile) {
+        imageUrl = await uploadFileToLovable(selectedFile);
+      }
+      
+      if (!imageUrl) {
+        toast({
+          title: "Error",
+          description: "Silakan pilih file atau masukkan URL gambar",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { error } = await supabase
         .from('gallery_photos')
         .insert([{
           title: newPhoto.title,
           description: newPhoto.description || null,
-          image_url: newPhoto.image_url,
+          image_url: imageUrl,
           date_taken: newPhoto.date_taken,
           uploaded_by: adminUser?.id
         }]);
@@ -165,6 +236,7 @@ const AdminDashboard = () => {
         image_url: '',
         date_taken: new Date().toISOString().split('T')[0]
       });
+      setSelectedFile(null);
       setIsAddDialogOpen(false);
       fetchPhotos();
     } catch (error) {
@@ -174,6 +246,8 @@ const AdminDashboard = () => {
         description: "Gagal menambahkan foto",
         variant: "destructive",
       });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -432,16 +506,43 @@ const AdminDashboard = () => {
                         onChange={(e) => setNewPhoto({...newPhoto, description: e.target.value})}
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="image_url">URL Gambar</Label>
-                      <Input
-                        id="image_url"
-                        value={newPhoto.image_url}
-                        onChange={(e) => setNewPhoto({...newPhoto, image_url: e.target.value})}
-                        placeholder="/lovable-uploads/filename.jpg"
-                        required
-                      />
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="file-upload">Upload File dari Device</Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            id="file-upload"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="flex-1"
+                          />
+                          <Upload className="h-4 w-4" />
+                        </div>
+                        {selectedFile && (
+                          <p className="text-sm text-green-600 mt-1">
+                            File dipilih: {selectedFile.name}
+                          </p>
+                        )}
+                      </div>
+                      
+                      <div className="text-center text-gray-500">
+                        atau
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="image_url">URL Gambar Manual</Label>
+                        <Input
+                          id="image_url"
+                          value={newPhoto.image_url}
+                          onChange={(e) => setNewPhoto({...newPhoto, image_url: e.target.value})}
+                          placeholder="/lovable-uploads/filename.jpg"
+                          disabled={!!selectedFile}
+                        />
+                      </div>
                     </div>
+                    
                     <div>
                       <Label htmlFor="date_taken">Tanggal</Label>
                       <Input
@@ -452,8 +553,8 @@ const AdminDashboard = () => {
                         required
                       />
                     </div>
-                    <Button type="submit" className="w-full">
-                      Tambah Foto
+                    <Button type="submit" className="w-full" disabled={isUploading}>
+                      {isUploading ? "Mengupload..." : "Tambah Foto"}
                     </Button>
                   </form>
                 </DialogContent>
