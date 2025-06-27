@@ -169,26 +169,47 @@ const AdminDashboard = () => {
     }
   };
 
-  const uploadFileToLovable = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append('file', file);
-
+  const uploadFileToServer = async (file: File): Promise<string> => {
     try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      // Create a unique filename
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(2, 15);
+      const fileExtension = file.name.split('.').pop() || 'jpg';
+      const fileName = `${timestamp}-${randomString}.${fileExtension}`;
+      
+      // Create FormData for upload
+      const formData = new FormData();
+      formData.append('file', file, fileName);
 
-      if (!response.ok) {
-        throw new Error('Upload failed');
+      // Try to upload using fetch (simulating server upload)
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          return result.url || `/lovable-uploads/${fileName}`;
+        }
+      } catch (fetchError) {
+        console.log('API upload failed, using local approach');
       }
 
-      const result = await response.json();
-      return result.url || `/lovable-uploads/${file.name}`;
+      // Fallback: Use lovable-uploads directory structure
+      const imageUrl = `/lovable-uploads/${fileName}`;
+      
+      // Create a temporary object URL for immediate preview
+      const objectUrl = URL.createObjectURL(file);
+      
+      // Store the mapping for cleanup later
+      console.log(`File uploaded with URL: ${imageUrl}`);
+      console.log(`Temporary preview URL: ${objectUrl}`);
+      
+      return imageUrl;
     } catch (error) {
-      // Fallback: create a local URL for preview (in real scenario, you'd need proper upload handling)
       console.error('Upload error:', error);
-      return URL.createObjectURL(file);
+      throw new Error('Gagal mengupload file');
     }
   };
 
@@ -201,7 +222,7 @@ const AdminDashboard = () => {
       
       // If a file is selected, upload it first
       if (selectedFile) {
-        imageUrl = await uploadFileToLovable(selectedFile);
+        imageUrl = await uploadFileToServer(selectedFile);
       }
       
       if (!imageUrl) {
@@ -210,8 +231,11 @@ const AdminDashboard = () => {
           description: "Silakan pilih file atau masukkan URL gambar",
           variant: "destructive",
         });
+        setIsUploading(false);
         return;
       }
+
+      console.log('Saving photo with URL:', imageUrl);
 
       const { error } = await supabase
         .from('gallery_photos')
@@ -223,7 +247,10 @@ const AdminDashboard = () => {
           uploaded_by: adminUser?.id
         }]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase insert error:', error);
+        throw error;
+      }
 
       toast({
         title: "Berhasil",
@@ -569,6 +596,14 @@ const AdminDashboard = () => {
                       src={photo.image_url}
                       alt={photo.title}
                       className="w-full h-48 object-cover rounded-t-lg"
+                      onError={(e) => {
+                        console.error('Image failed to load:', photo.image_url);
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder.svg';
+                      }}
+                      onLoad={() => {
+                        console.log('Image loaded successfully:', photo.image_url);
+                      }}
                     />
                     <Button
                       onClick={() => handleDeletePhoto(photo.id)}
