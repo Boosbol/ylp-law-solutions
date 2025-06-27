@@ -166,46 +166,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const uploadFileToSupabase = async (file: File): Promise<string> => {
-    try {
-      // Create a unique filename
-      const timestamp = Date.now();
-      const randomString = Math.random().toString(36).substring(2, 15);
-      const fileExtension = file.name.split('.').pop() || 'jpg';
-      const fileName = `gallery/${timestamp}-${randomString}.${fileExtension}`;
-      
-      console.log('Uploading file to Supabase Storage:', fileName);
-
-      // Upload to Supabase Storage
-      const { data, error } = await supabase.storage
-        .from('gallery-photos')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (error) {
-        console.error('Supabase storage error:', error);
-        throw error;
-      }
-
-      console.log('File uploaded successfully:', data);
-
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from('gallery-photos')
-        .getPublicUrl(fileName);
-
-      const publicUrl = urlData.publicUrl;
-      console.log('Public URL:', publicUrl);
-
-      return publicUrl;
-    } catch (error) {
-      console.error('Upload error:', error);
-      throw new Error('Gagal mengupload file ke storage');
-    }
-  };
-
   const handleAddPhoto = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -223,25 +183,53 @@ const AdminDashboard = () => {
     try {
       console.log('Starting photo upload process...');
       
-      // Upload file to Supabase Storage
-      const imageUrl = await uploadFileToSupabase(selectedFile);
+      // Create a unique filename
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(2, 15);
+      const fileExtension = selectedFile.name.split('.').pop() || 'jpg';
+      const fileName = `${timestamp}-${randomString}.${fileExtension}`;
       
-      console.log('Saving photo with URL:', imageUrl);
+      console.log('Uploading file to Supabase Storage:', fileName);
+
+      // Upload file to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('gallery-photos')
+        .upload(fileName, selectedFile, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('File uploaded successfully:', uploadData);
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('gallery-photos')
+        .getPublicUrl(fileName);
+
+      const publicUrl = urlData.publicUrl;
+      console.log('Public URL:', publicUrl);
+      
+      console.log('Saving photo with URL:', publicUrl);
 
       // Save photo data to database
-      const { error } = await supabase
+      const { error: dbError } = await supabase
         .from('gallery_photos')
         .insert([{
           title: newPhoto.title,
           description: newPhoto.description || null,
-          image_url: imageUrl,
+          image_url: publicUrl,
           date_taken: newPhoto.date_taken,
           uploaded_by: adminUser?.id
         }]);
 
-      if (error) {
-        console.error('Supabase insert error:', error);
-        throw error;
+      if (dbError) {
+        console.error('Database insert error:', dbError);
+        throw dbError;
       }
 
       toast({
@@ -282,10 +270,12 @@ const AdminDashboard = () => {
         const urlParts = photo.image_url.split('/');
         const fileName = urlParts[urlParts.length - 1];
         
+        console.log('Deleting file from storage:', fileName);
+        
         // Delete from storage
         const { error: storageError } = await supabase.storage
           .from('gallery-photos')
-          .remove([`gallery/${fileName}`]);
+          .remove([fileName]);
           
         if (storageError) {
           console.error('Storage delete error:', storageError);
