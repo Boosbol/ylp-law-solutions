@@ -55,7 +55,6 @@ const AdminDashboard = () => {
   const [newPhoto, setNewPhoto] = useState({
     title: '',
     description: '',
-    image_url: '',
     date_taken: new Date().toISOString().split('T')[0]
   });
   const [newCase, setNewCase] = useState({
@@ -164,79 +163,72 @@ const AdminDashboard = () => {
       }
       
       setSelectedFile(file);
-      // Clear manual URL when file is selected
-      setNewPhoto({...newPhoto, image_url: ''});
     }
   };
 
-  const uploadFileToServer = async (file: File): Promise<string> => {
+  const uploadFileToSupabase = async (file: File): Promise<string> => {
     try {
       // Create a unique filename
       const timestamp = Date.now();
       const randomString = Math.random().toString(36).substring(2, 15);
       const fileExtension = file.name.split('.').pop() || 'jpg';
-      const fileName = `${timestamp}-${randomString}.${fileExtension}`;
+      const fileName = `gallery/${timestamp}-${randomString}.${fileExtension}`;
       
-      // Create FormData for upload
-      const formData = new FormData();
-      formData.append('file', file, fileName);
+      console.log('Uploading file to Supabase Storage:', fileName);
 
-      // Try to upload using fetch (simulating server upload)
-      try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('gallery-photos')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
         });
 
-        if (response.ok) {
-          const result = await response.json();
-          return result.url || `/lovable-uploads/${fileName}`;
-        }
-      } catch (fetchError) {
-        console.log('API upload failed, using local approach');
+      if (error) {
+        console.error('Supabase storage error:', error);
+        throw error;
       }
 
-      // Fallback: Use lovable-uploads directory structure
-      const imageUrl = `/lovable-uploads/${fileName}`;
-      
-      // Create a temporary object URL for immediate preview
-      const objectUrl = URL.createObjectURL(file);
-      
-      // Store the mapping for cleanup later
-      console.log(`File uploaded with URL: ${imageUrl}`);
-      console.log(`Temporary preview URL: ${objectUrl}`);
-      
-      return imageUrl;
+      console.log('File uploaded successfully:', data);
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('gallery-photos')
+        .getPublicUrl(fileName);
+
+      const publicUrl = urlData.publicUrl;
+      console.log('Public URL:', publicUrl);
+
+      return publicUrl;
     } catch (error) {
       console.error('Upload error:', error);
-      throw new Error('Gagal mengupload file');
+      throw new Error('Gagal mengupload file ke storage');
     }
   };
 
   const handleAddPhoto = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!selectedFile) {
+      toast({
+        title: "Error",
+        description: "Silakan pilih file gambar",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsUploading(true);
     
     try {
-      let imageUrl = newPhoto.image_url;
+      console.log('Starting photo upload process...');
       
-      // If a file is selected, upload it first
-      if (selectedFile) {
-        imageUrl = await uploadFileToServer(selectedFile);
-      }
+      // Upload file to Supabase Storage
+      const imageUrl = await uploadFileToSupabase(selectedFile);
       
-      if (!imageUrl) {
-        toast({
-          title: "Error",
-          description: "Silakan pilih file atau masukkan URL gambar",
-          variant: "destructive",
-        });
-        setIsUploading(false);
-        return;
-      }
-
       console.log('Saving photo with URL:', imageUrl);
 
+      // Save photo data to database
       const { error } = await supabase
         .from('gallery_photos')
         .insert([{
@@ -257,10 +249,10 @@ const AdminDashboard = () => {
         description: "Foto berhasil ditambahkan",
       });
 
+      // Reset form
       setNewPhoto({
         title: '',
         description: '',
-        image_url: '',
         date_taken: new Date().toISOString().split('T')[0]
       });
       setSelectedFile(null);
@@ -282,6 +274,25 @@ const AdminDashboard = () => {
     if (!confirm('Apakah Anda yakin ingin menghapus foto ini?')) return;
 
     try {
+      // Get photo data to delete from storage
+      const photo = photos.find(p => p.id === id);
+      
+      if (photo && photo.image_url.includes('gallery-photos')) {
+        // Extract filename from URL for deletion
+        const urlParts = photo.image_url.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        
+        // Delete from storage
+        const { error: storageError } = await supabase.storage
+          .from('gallery-photos')
+          .remove([`gallery/${fileName}`]);
+          
+        if (storageError) {
+          console.error('Storage delete error:', storageError);
+        }
+      }
+
+      // Delete from database
       const { error } = await supabase
         .from('gallery_photos')
         .delete()
@@ -534,40 +545,24 @@ const AdminDashboard = () => {
                       />
                     </div>
                     
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="file-upload">Upload File dari Device</Label>
-                        <div className="flex items-center gap-2">
-                          <Input
-                            id="file-upload"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className="flex-1"
-                          />
-                          <Upload className="h-4 w-4" />
-                        </div>
-                        {selectedFile && (
-                          <p className="text-sm text-green-600 mt-1">
-                            File dipilih: {selectedFile.name}
-                          </p>
-                        )}
-                      </div>
-                      
-                      <div className="text-center text-gray-500">
-                        atau
-                      </div>
-                      
-                      <div>
-                        <Label htmlFor="image_url">URL Gambar Manual</Label>
+                    <div>
+                      <Label htmlFor="file-upload">Upload File Gambar</Label>
+                      <div className="flex items-center gap-2">
                         <Input
-                          id="image_url"
-                          value={newPhoto.image_url}
-                          onChange={(e) => setNewPhoto({...newPhoto, image_url: e.target.value})}
-                          placeholder="/lovable-uploads/filename.jpg"
-                          disabled={!!selectedFile}
+                          id="file-upload"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="flex-1"
+                          required
                         />
+                        <Upload className="h-4 w-4" />
                       </div>
+                      {selectedFile && (
+                        <p className="text-sm text-green-600 mt-1">
+                          File dipilih: {selectedFile.name}
+                        </p>
+                      )}
                     </div>
                     
                     <div>
