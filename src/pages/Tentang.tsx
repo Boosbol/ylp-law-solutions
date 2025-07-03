@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Scale, Users, Briefcase, Handshake, FileText, Gavel } from 'lucide-react';
@@ -38,7 +37,15 @@ const Tentang = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-primary to-gray-900 text-white">
+      <section 
+        className="py-20 bg-gradient-to-r from-primary to-gray-900 text-white"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/lovable-uploads/17e97f92-90c7-4001-b754-945f35b72d2d.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -97,7 +96,15 @@ const StudiKasus = () => {
 
   return (
     <Layout>
-      <div className="bg-gradient-to-r from-primary to-primary/80 text-white py-16">
+      <div 
+        className="bg-gradient-to-r from-primary to-primary/80 text-white py-16"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/lovable-uploads/17e97f92-90c7-4001-b754-945f35b72d2d.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="container mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Studi Kasus</h1>
           <p className="text-xl opacity-90 max-w-2xl">

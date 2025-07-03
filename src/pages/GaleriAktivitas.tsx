@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Image } from 'lucide-react';
@@ -64,7 +63,15 @@ const GaleriAktivitas = () => {
     <Layout>
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="bg-primary text-primary-foreground py-16">
+        <section 
+          className="bg-primary text-primary-foreground py-16"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/lovable-uploads/17e97f92-90c7-4001-b754-945f35b72d2d.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Galeri Aktivitas
