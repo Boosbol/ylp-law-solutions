@@ -4,7 +4,15 @@ import { Instagram } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer 
+      className="bg-primary text-primary-foreground relative"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/lovable-uploads/a738a286-05ef-464f-a74f-507da326a9cd.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
