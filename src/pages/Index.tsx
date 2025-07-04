@@ -48,7 +48,7 @@ const Index = () => {
     <Layout>
       {/* Hero Section */}
       <section 
-        className="relative bg-gradient-to-r from-primary to-gray-900 text-white py-20 overflow-hidden"
+        className="relative bg-gradient-to-r from-primary to-gray-900 text-white py-20 overflow-hidden min-h-[600px]"
         style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/lovable-uploads/2edc235d-6189-4dad-94b6-13348c9972ab.png')`,
           backgroundSize: 'cover',
@@ -57,8 +57,8 @@ const Index = () => {
         }}
       >
         <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4 relative z-10 h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[500px]">
             <div>
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 Mitra Hukum Terkemuka dengan Layanan{" "}
@@ -88,20 +88,22 @@ const Index = () => {
                 </Link>
               </div>
             </div>
-            <div className="hidden lg:block">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
-                <div className="grid grid-cols-2 gap-6">
-                  {stats.map((stat, index) => (
-                    <div key={index} className="text-center">
-                      <div className="text-3xl font-bold text-gold-500 mb-2">
-                        {stat.number}
-                      </div>
-                      <div className="text-sm text-gray-300">
-                        {stat.label}
-                      </div>
+          </div>
+          
+          {/* Stats positioned at bottom right */}
+          <div className="absolute bottom-8 right-8 hidden lg:block">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+              <div className="grid grid-cols-2 gap-4">
+                {stats.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-2xl font-bold text-gold-500 mb-1">
+                      {stat.number}
                     </div>
-                  ))}
-                </div>
+                    <div className="text-xs text-gray-300">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
