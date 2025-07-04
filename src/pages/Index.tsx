@@ -90,10 +90,10 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Stats positioned at bottom right */}
-          <div className="absolute bottom-8 right-8 hidden lg:block">
+          {/* Stats positioned at bottom center */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden lg:block">
             <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6 shadow-lg">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-4 gap-6">
                 {stats.map((stat, index) => (
                   <div key={index} className="text-center">
                     <div className="text-2xl font-bold text-gold-500 mb-1 drop-shadow-md">
