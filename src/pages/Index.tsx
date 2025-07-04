@@ -48,9 +48,9 @@ const Index = () => {
     <Layout>
       {/* Hero Section */}
       <section 
-        className="relative bg-gradient-to-r from-primary to-gray-900 text-white py-20 overflow-hidden min-h-[600px]"
+        className="relative bg-gradient-to-r from-primary to-gray-900 text-white py-20 overflow-hidden min-h-[700px]"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/lovable-uploads/2edc235d-6189-4dad-94b6-13348c9972ab.png')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('/lovable-uploads/2edc235d-6189-4dad-94b6-13348c9972ab.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
@@ -90,10 +90,10 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Stats positioned at bottom center */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 hidden lg:block">
+          {/* Stats positioned at bottom center with 2x2 grid */}
+          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 hidden lg:block">
             <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6 shadow-lg">
-              <div className="grid grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                 {stats.map((stat, index) => (
                   <div key={index} className="text-center">
                     <div className="text-2xl font-bold text-gold-500 mb-1 drop-shadow-md">
