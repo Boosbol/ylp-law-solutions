@@ -48,23 +48,23 @@ const Index = () => {
     <Layout>
       {/* Hero Section */}
       <section 
-        className="relative bg-gradient-to-r from-primary to-gray-900 text-white py-20 overflow-hidden min-h-[700px]"
+        className="relative bg-gradient-to-r from-primary to-gray-900 text-white py-20 overflow-hidden min-h-[600px]"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('/lovable-uploads/2edc235d-6189-4dad-94b6-13348c9972ab.png')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/lovable-uploads/2edc235d-6189-4dad-94b6-13348c9972ab.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-10"></div>
+        <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="container mx-auto px-4 relative z-10 h-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[500px]">
             <div>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 Mitra Hukum Terkemuka dengan Layanan{" "}
                 <span className="text-gold-500">Unggul, Inovatif, dan Profesional</span>
               </h1>
-              <p className="text-xl mb-8 text-gray-100 drop-shadow-md">
+              <p className="text-xl mb-8 text-gray-200">
                 Yasmine Lisasih Law Office & Partners berkolaborasi dengan Hotman 911 
                 untuk memberikan solusi hukum terbaik dengan standar internasional.
               </p>
@@ -90,16 +90,16 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Stats positioned at bottom center with 2x2 grid */}
-          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 hidden lg:block">
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6 shadow-lg">
-              <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+          {/* Stats positioned at bottom right */}
+          <div className="absolute bottom-8 right-8 hidden lg:block">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+              <div className="grid grid-cols-2 gap-4">
                 {stats.map((stat, index) => (
                   <div key={index} className="text-center">
-                    <div className="text-2xl font-bold text-gold-500 mb-1 drop-shadow-md">
+                    <div className="text-2xl font-bold text-gold-500 mb-1">
                       {stat.number}
                     </div>
-                    <div className="text-xs text-white drop-shadow-sm">
+                    <div className="text-xs text-gray-300">
                       {stat.label}
                     </div>
                   </div>
