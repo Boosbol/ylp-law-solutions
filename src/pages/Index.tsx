@@ -50,7 +50,7 @@ const Index = () => {
       <section 
         className="relative bg-gradient-to-r from-primary to-gray-900 text-white py-20 overflow-hidden min-h-[600px]"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/lovable-uploads/90898dfc-8929-48fb-84da-fa24ff9297b8.png')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/lovable-uploads/e2fd9d03-960f-4451-bad1-dc9a13636746.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
