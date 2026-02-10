@@ -62,7 +62,7 @@ const Tim = () => {
       spesialisasi: ["Hukum Bisnis", "Hukum Perkawinan", "Hukum Pidana"],
       pengalaman: "20+ tahun",
       lokasi: "Jakarta",
-      photo: "/lovable-uploads/beny-sugiyanto.jpeg"
+      photo: "/lovable-uploads/beny-sugiyanto.png"
     }
   ];
 
