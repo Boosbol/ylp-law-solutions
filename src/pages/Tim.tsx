@@ -55,6 +55,14 @@ const Tim = () => {
       pengalaman: "20+ tahun",
       lokasi: "Jakarta",
       photo: "/lovable-uploads/9aaad565-3cd1-49df-b92d-7130a4d56bd5.png"
+    },
+    {
+      nama: "Beny Sugiyanto S.H.",
+      posisi: "Partner",
+      spesialisasi: ["Hukum Bisnis", "Hukum Perkawinan", "Hukum Pidana"],
+      pengalaman: "20+ tahun",
+      lokasi: "Jakarta",
+      photo: "/lovable-uploads/beny-sugiyanto.jpeg"
     }
   ];
 
