@@ -66,30 +66,23 @@ const Tentang = () => {
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Sejarah Kami</h2>
               <p className="text-lg text-muted-foreground mb-6">
-                Didirikan pada 17 Agustus 2023, Yasmine Lisasih Law Office & Partners lahir dari visi untuk menyediakan layanan hukum berkualitas tinggi dengan pendekatan yang inovatif dan profesional.
               </p>
               <p className="text-lg text-muted-foreground mb-6">
-                Managing Partner dari YLP Law Office, Nin Yasmine Lisasih S.H., M.H. (biasa disapa Miss Yasmine), adalah seorang advokat (pengacara) profesional, akademisi hukum, dan wirausahawan asal Solo, Indonesia. Ia dikenal luas karena menjalankan peran ganda yang sukses sebagai praktisi hukum yang menangani berbagai kasus-kasus viral tingkat nasional sekaligus dosen di sejumlah universitas di Jakarta.
               </p>
               <p className="text-lg text-muted-foreground mb-6">
-                Yasmine tergabung dalam tim advokat Hotman 911 Official yang dipimpin oleh pengacara kondang Dr. Hotman Paris Hutapea, S.H., M.Hum.. Di sini, ia aktif membantu penanganan berbagai kasus kemanusiaan dan pencari keadilan. Awal mulai karier professionalnya dengan Dr. Hotman Paris Hutapea S.H., M.H. berawal dari menjadi asisten dosen Bp. Hotman Paris dari tahun 2013 di Universitas 17 Agustus 1945.
               </p>
               <p className="text-lg text-muted-foreground mb-6">
-                Sebagai akademisi dengan jabatan fungsional Lektor (Assistant Profesor), ia menjadi dosen tetap di Fakultas Hukum Universitas Esa Unggul. Selain itu, ia juga mengajar di Kwik Kian Gie School of Business, GS FAME Institute of Business, dan Universitas 17 Agustus 1945 (UTA45) Jakarta serta Universitas Mpu Tantular.
               </p>
               <p className="text-lg text-muted-foreground mb-6">
-                Latar belakang pendidikan Yasmine ialah S1 di Fakultas Hukum Universitas Negeri Sebelas maret Surakarta. Ia lulus dengan predikat cumlaude, IPK tertinggi lebih dari wisudawan, lulusan termuda se universitas (lulus pada usia 20 tahun) dan tergolong lulusan tercepat di angkatannya. Ia langsung melanjutkan studi S2 di Universitas Padjajaran di program studi Magister Hukum Bisnis dengan ipk di atas 3,50.
               </p>
               <p className="text-lg text-muted-foreground mb-4">
-                Penghargaan yang pernah diraih antara lain:
               </p>
               <ul className="text-lg text-muted-foreground mb-6 list-disc list-inside space-y-2">
-                <li>Pada tahun 2025 ia meraih Woman Empower Woman Award: Ia dianugerahi penghargaan sebagai "Best Performance Woman in Law and Education" atas kontribusi konsistennya di dunia hukum dan pendidikan. Penghargaan ini didukung oleh Kementerian Pemberdayaan Perempuan dan Perlindungan Anak (KemenPPPA).</li>
-                <li>Pada tahun yang sama ia meraih Top 35 Dosen Hukum Terfavorit: Terpilih sebagai salah satu dari 35 dosen hukum terfavorit di Indonesia versi Hukumonline.</li>
-                <li>Penerima Beasiswa Djarum: Ia juga berhasil menyelesaikan studi S1 dan S2 berkat dukungan penuh dari Djarum Beasiswa Plus.</li>
+                <li></li>
+                <li></li>
+                <li></li>
               </ul>
               <p className="text-lg text-muted-foreground">
-                YLP Law Office berkolaborasi dengan Hotman 911 untuk penanganan kasus-kasus kompleks, memberikan keunggulan dalam memberikan solusi hukum yang efektif dan strategis. Dengan kantor strategis di kawasan industri, kami melayani klien dari berbagai sektor dengan standar pelayanan internasional.
               </p>
             </div>
             <div className="bg-gold-50 p-8 rounded-lg">
