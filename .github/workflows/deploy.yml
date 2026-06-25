@@ -1,4 +1,4 @@
-name: Deploy Lovable to Hostinger
+name: Direct GitHub to Hostinger Deploy
 
 on:
   push:
@@ -15,12 +15,13 @@ jobs:
     - name: ⚡ Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '22' # Menggunakan versi LTS terbaru yang stabil
+        node-version: '22'
 
-    - name: 📦 Install and Build
-      run: |
-        npm install
-        npm run build
+    - name: 📦 Install Dependencies
+      run: npm ci
+
+    - name: 🚀 Build Project
+      run: npm run build
 
     - name: 📂 Sync Files to Hostinger
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
