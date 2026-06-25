@@ -20,4 +20,9 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Memaksa output build script menggunakan format yang lebih kompatibel
+    target: "es2015",
+    cssTarget: "chrome61",
+  }
 }));
