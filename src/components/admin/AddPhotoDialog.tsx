@@ -64,14 +64,22 @@ const AddPhotoDialog = ({ isOpen, onClose, adminUser, onPhotoAdded }: AddPhotoDi
     }
 
     setIsUploading(true);
-
+    
     try {
+      console.log('Starting photo upload process...');
+      
       const base64 = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve((reader.result as string).split(',')[1]);
+        reader.onload = () => {
+          const result = reader.result as string;
+          const base64Data = result.split(',')[1];
+          resolve(base64Data);
+        };
         reader.onerror = reject;
         reader.readAsDataURL(selectedFile);
       });
+
+      console.log('File converted to base64, saving to database...');
 
       const { error: dbError } = await supabase
         .from('gallery_photos')
@@ -83,7 +91,12 @@ const AddPhotoDialog = ({ isOpen, onClose, adminUser, onPhotoAdded }: AddPhotoDi
           uploaded_by: adminUser?.id
         }]);
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database insert error:', dbError);
+        throw dbError;
+      }
+
+      console.log('Photo saved successfully to database');
 
       toast({
         title: "Berhasil",
@@ -99,6 +112,7 @@ const AddPhotoDialog = ({ isOpen, onClose, adminUser, onPhotoAdded }: AddPhotoDi
       onClose();
       onPhotoAdded();
     } catch (error) {
+      console.error('Error adding photo:', error);
       toast({
         title: "Error",
         description: "Gagal menambahkan foto",

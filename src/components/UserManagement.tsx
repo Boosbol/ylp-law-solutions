@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Trash2, Plus, Edit, X, Check } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import bcrypt from 'bcryptjs';
 
 interface AdminUser {
   id: string;
@@ -26,7 +28,11 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [newUser, setNewUser] = useState({ name: '', email: '', password: '' });
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -34,14 +40,27 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
 
   const fetchUsers = async () => {
     try {
+      console.log('Fetching admin users...');
       const { data, error } = await supabase
         .from('admin_users')
-        .select('id, email, name, created_at')
+        .select('*')
         .order('created_at', { ascending: false });
-      if (error) throw error;
+
+      console.log('Fetch result:', { data, error });
+
+      if (error) {
+        console.error('Error fetching users:', error);
+        throw error;
+      }
+      
       setUsers(data || []);
-    } catch {
-      toast({ title: 'Error', description: 'Gagal mengambil data user', variant: 'destructive' });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      toast({
+        title: "Error",
+        description: "Gagal mengambil data user",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -49,42 +68,120 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (submitting) return;
     setSubmitting(true);
+    
     try {
-      const { data, error } = await supabase.functions.invoke('admin-create-user', {
-        body: { email: newUser.email, password: newUser.password, name: newUser.name },
-      });
-      if (error || (data as any)?.error) {
-        toast({
-          title: 'Error',
-          description: (data as any)?.error ?? error?.message ?? 'Gagal menambahkan user',
-          variant: 'destructive',
-        });
+      console.log('Adding new user:', { name: newUser.name, email: newUser.email });
+      
+      // Hash password
+      const passwordHash = await bcrypt.hash(newUser.password, 10);
+      
+      const { data, error } = await supabase
+        .from('admin_users')
+        .insert([{
+          name: newUser.name,
+          email: newUser.email,
+          password_hash: passwordHash
+        }])
+        .select()
+        .single();
+
+      console.log('Insert result:', { data, error });
+
+      if (error) {
+        console.error('Insert error:', error);
+        if (error.code === '23505') {
+          toast({
+            title: "Error",
+            description: "Email sudah digunakan oleh user lain",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: `Gagal menambahkan user admin: ${error.message}`,
+            variant: "destructive",
+          });
+        }
         return;
       }
-      toast({ title: 'Berhasil', description: 'User admin berhasil ditambahkan' });
+
+      toast({
+        title: "Berhasil",
+        description: "User admin berhasil ditambahkan",
+      });
+
       setNewUser({ name: '', email: '', password: '' });
       setIsAddDialogOpen(false);
       fetchUsers();
-    } catch (err: any) {
-      toast({ title: 'Error', description: err?.message ?? 'Gagal menambahkan user', variant: 'destructive' });
+    } catch (error) {
+      console.error('Error adding user:', error);
+      toast({
+        title: "Error",
+        description: "Gagal menambahkan user admin",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleUpdateUser = async (userId: string, updates: { name?: string; email?: string }) => {
+  const handleUpdateUser = async (userId: string, updates: { name?: string; email?: string; password?: string }) => {
     if (submitting) return;
     setSubmitting(true);
+
     try {
-      const { error } = await supabase.from('admin_users').update(updates).eq('id', userId);
-      if (error) throw error;
-      toast({ title: 'Berhasil', description: 'Data user berhasil diupdate' });
+      console.log('Updating user:', userId, updates);
+      
+      const updateData: any = {};
+      
+      if (updates.name) updateData.name = updates.name;
+      if (updates.email) updateData.email = updates.email;
+      if (updates.password) {
+        updateData.password_hash = await bcrypt.hash(updates.password, 10);
+      }
+
+      const { error } = await supabase
+        .from('admin_users')
+        .update(updateData)
+        .eq('id', userId);
+
+      console.log('Update result:', { error });
+
+      if (error) {
+        console.error('Update error:', error);
+        if (error.code === '23505') {
+          toast({
+            title: "Error",
+            description: "Email sudah digunakan oleh user lain",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: `Gagal mengupdate data user: ${error.message}`,
+            variant: "destructive",
+          });
+        }
+        return;
+      }
+
+      toast({
+        title: "Berhasil",
+        description: "Data user berhasil diupdate",
+      });
+
       setEditingUser(null);
       fetchUsers();
-    } catch (err: any) {
-      toast({ title: 'Error', description: err?.message ?? 'Gagal mengupdate user', variant: 'destructive' });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      toast({
+        title: "Error",
+        description: "Gagal mengupdate data user",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -92,28 +189,47 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
 
   const handleDeleteUser = async (userId: string) => {
     if (userId === currentUserId) {
-      toast({ title: 'Error', description: 'Tidak dapat menghapus akun sendiri', variant: 'destructive' });
+      toast({
+        title: "Error",
+        description: "Tidak dapat menghapus akun sendiri",
+        variant: "destructive",
+      });
       return;
     }
+
     if (!confirm('Apakah Anda yakin ingin menghapus user ini?')) return;
+
     if (submitting) return;
     setSubmitting(true);
+
     try {
-      const { data, error } = await supabase.functions.invoke('admin-delete-user', {
-        body: { adminUserId: userId },
-      });
-      if (error || (data as any)?.error) {
-        toast({
-          title: 'Error',
-          description: (data as any)?.error ?? error?.message ?? 'Gagal menghapus user',
-          variant: 'destructive',
-        });
-        return;
+      console.log('Deleting user:', userId);
+      
+      const { error } = await supabase
+        .from('admin_users')
+        .delete()
+        .eq('id', userId);
+
+      console.log('Delete result:', { error });
+
+      if (error) {
+        console.error('Delete error:', error);
+        throw error;
       }
-      toast({ title: 'Berhasil', description: 'User berhasil dihapus' });
+
+      toast({
+        title: "Berhasil",
+        description: "User berhasil dihapus",
+      });
+
       fetchUsers();
-    } catch (err: any) {
-      toast({ title: 'Error', description: err?.message ?? 'Gagal menghapus user', variant: 'destructive' });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast({
+        title: "Error",
+        description: "Gagal menghapus user",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -153,7 +269,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                 <Input
                   id="name"
                   value={newUser.name}
-                  onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                  onChange={(e) => setNewUser({...newUser, name: e.target.value})}
                   required
                   disabled={submitting}
                 />
@@ -164,20 +280,20 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                   id="email"
                   type="email"
                   value={newUser.email}
-                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  onChange={(e) => setNewUser({...newUser, email: e.target.value})}
                   required
                   disabled={submitting}
                 />
               </div>
               <div>
-                <Label htmlFor="password">Password (min. 8 karakter)</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   value={newUser.password}
-                  onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                  onChange={(e) => setNewUser({...newUser, password: e.target.value})}
                   required
-                  minLength={8}
+                  minLength={6}
                   disabled={submitting}
                 />
               </div>
@@ -188,7 +304,7 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
           </DialogContent>
         </Dialog>
       </CardHeader>
-
+      
       <CardContent>
         <Table>
           <TableHeader>
@@ -206,7 +322,8 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                   {editingUser?.id === user.id ? (
                     <Input
                       value={editingUser.name}
-                      onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+                      onChange={(e) => setEditingUser({...editingUser, name: e.target.value})}
+                      className="w-full"
                       disabled={submitting}
                     />
                   ) : (
@@ -220,35 +337,49 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
                     <Input
                       type="email"
                       value={editingUser.email}
-                      onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+                      onChange={(e) => setEditingUser({...editingUser, email: e.target.value})}
+                      className="w-full"
                       disabled={submitting}
                     />
                   ) : (
                     user.email
                   )}
                 </TableCell>
-                <TableCell>{new Date(user.created_at).toLocaleDateString('id-ID')}</TableCell>
+                <TableCell>
+                  {new Date(user.created_at).toLocaleDateString('id-ID')}
+                </TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
                     {editingUser?.id === user.id ? (
                       <>
                         <Button
                           size="sm"
-                          onClick={() =>
-                            handleUpdateUser(user.id, { name: editingUser.name, email: editingUser.email })
-                          }
+                          onClick={() => handleUpdateUser(user.id, {
+                            name: editingUser.name,
+                            email: editingUser.email
+                          })}
                           className="bg-green-500 hover:bg-green-600"
                           disabled={submitting}
                         >
                           <Check className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => setEditingUser(null)} disabled={submitting}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setEditingUser(null)}
+                          disabled={submitting}
+                        >
                           <X className="h-4 w-4" />
                         </Button>
                       </>
                     ) : (
                       <>
-                        <Button size="sm" variant="outline" onClick={() => setEditingUser(user)} disabled={submitting}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setEditingUser(user)}
+                          disabled={submitting}
+                        >
                           <Edit className="h-4 w-4" />
                         </Button>
                         {user.id !== currentUserId && (
@@ -269,9 +400,11 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
             ))}
           </TableBody>
         </Table>
-
+        
         {users.length === 0 && (
-          <div className="text-center py-8 text-gray-500">Tidak ada user admin yang ditemukan</div>
+          <div className="text-center py-8 text-gray-500">
+            Tidak ada user admin yang ditemukan
+          </div>
         )}
       </CardContent>
     </Card>

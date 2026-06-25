@@ -1,27 +1,26 @@
-name: Direct GitHub to Hostinger Deploy
+name: Deploy Lovable to Hostinger
 
 on:
   push:
     branches:
-      - main
+      - main  # Ubah ke master jika branch utama Anda namanya master
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: ⚡ Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v3
       with:
-        node-version: '22'
+        node-version: '20'
 
-    - name: 📦 Install Dependencies
-      run: npm ci
-
-    - name: 🚀 Build Project
-      run: npm run build
+    - name: 📦 Install and Build
+      run: |
+        npm install
+        npm run build
 
     - name: 📂 Sync Files to Hostinger
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4

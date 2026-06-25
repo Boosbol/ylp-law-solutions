@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { ArrowLeft } from 'lucide-react';
+import bcrypt from 'bcryptjs';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -19,33 +21,62 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error || !data.user) {
-        toast({ title: 'Error', description: 'Email atau password salah', variant: 'destructive' });
-        return;
-      }
+      console.log('Attempting login with email:', email);
+      
+      // Get admin user by email
+      const { data: adminUser, error } = await supabase
+        .from('admin_users')
+        .select('*')
+        .eq('email', email)
+        .single();
 
-      const { data: roleRow } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', data.user.id)
-        .eq('role', 'admin')
-        .maybeSingle();
+      console.log('Database query result:', { adminUser, error });
 
-      if (!roleRow) {
-        await supabase.auth.signOut();
+      if (error || !adminUser) {
+        console.log('User not found or error:', error);
         toast({
-          title: 'Akses ditolak',
-          description: 'Akun ini bukan admin.',
-          variant: 'destructive',
+          title: "Error",
+          description: "Email atau password salah",
+          variant: "destructive",
         });
         return;
       }
 
-      toast({ title: 'Berhasil', description: 'Login berhasil!' });
+      // Verify password using bcrypt
+      const isPasswordValid = await bcrypt.compare(password, adminUser.password_hash);
+      
+      console.log('Password verification result:', isPasswordValid);
+
+      if (!isPasswordValid) {
+        console.log('Invalid password');
+        toast({
+          title: "Error",
+          description: "Email atau password salah",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Store admin session in localStorage
+      localStorage.setItem('adminUser', JSON.stringify({
+        id: adminUser.id,
+        email: adminUser.email,
+        name: adminUser.name
+      }));
+
+      toast({
+        title: "Berhasil",
+        description: "Login berhasil!",
+      });
+
       navigate('/admin/dashboard');
-    } catch {
-      toast({ title: 'Error', description: 'Terjadi kesalahan saat login', variant: 'destructive' });
+    } catch (error) {
+      console.error('Login error:', error);
+      toast({
+        title: "Error",
+        description: "Terjadi kesalahan saat login",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -53,8 +84,12 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      {/* Back to Main Site Navigation */}
       <div className="absolute top-4 left-4">
-        <Link to="/" className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors">
+        <Link 
+          to="/" 
+          className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+        >
           <ArrowLeft className="h-4 w-4" />
           <span>Kembali ke Situs Utama</span>
         </Link>
@@ -62,9 +97,9 @@ const AdminLogin = () => {
 
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <img
-            src="/lovable-uploads/68c75b06-1651-479d-8fb4-362a875ec3ed.png"
-            alt="YLP Logo"
+          <img 
+            src="/lovable-uploads/68c75b06-1651-479d-8fb4-362a875ec3ed.png" 
+            alt="YLP Logo" 
             className="h-16 w-auto mx-auto mb-4"
           />
           <CardTitle className="text-2xl">Admin Login</CardTitle>
@@ -73,7 +108,14 @@ const AdminLogin = () => {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@yasminelisasih.com"
+                required
+              />
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
@@ -82,10 +124,15 @@ const AdminLogin = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
                 required
               />
             </div>
-            <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={loading}>
+            <Button 
+              type="submit" 
+              className="w-full bg-primary hover:bg-primary/90"
+              disabled={loading}
+            >
               {loading ? 'Logging in...' : 'Login'}
             </Button>
           </form>

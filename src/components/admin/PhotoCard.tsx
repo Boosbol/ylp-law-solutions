@@ -18,8 +18,12 @@ const PhotoCard = ({ photo, onDelete }: PhotoCardProps) => {
           alt={photo.title}
           className="w-full h-48 object-cover rounded-t-lg"
           onError={(e) => {
+            console.error('Image failed to load:', photo.image_url);
             const target = e.target as HTMLImageElement;
             target.src = '/placeholder.svg';
+          }}
+          onLoad={() => {
+            console.log('Image loaded successfully:', photo.image_url);
           }}
         />
         <Button
