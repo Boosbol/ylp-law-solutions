@@ -21,7 +21,6 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Memaksa output build script menggunakan format yang lebih kompatibel
     target: "es2015",
     cssTarget: "chrome61",
   }
