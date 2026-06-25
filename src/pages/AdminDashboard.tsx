@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,6 +7,7 @@ import { AdminUser } from '@/types/admin';
 import UserManagement from '@/components/UserManagement';
 import GalleryManagement from '@/components/admin/GalleryManagement';
 import CaseStudyManagement from '@/components/admin/CaseStudyManagement';
+import { supabase } from '@/integrations/supabase/client';
 
 const AdminDashboard = () => {
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
@@ -15,21 +15,57 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = () => {
-      const stored = localStorage.getItem('adminUser');
-      if (!stored) {
+    let active = true;
+
+    const verify = async (userId: string, email: string) => {
+      const { data: roleRow } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (!active) return;
+      if (!roleRow) {
+        await supabase.auth.signOut();
         navigate('/admin/login');
         return;
       }
-      setAdminUser(JSON.parse(stored));
+
+      const { data: profile } = await supabase
+        .from('admin_users')
+        .select('id, name, email')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      setAdminUser({
+        id: profile?.id ?? userId,
+        email: profile?.email ?? email,
+        name: profile?.name ?? email,
+      });
       setLoading(false);
     };
 
-    checkAuth();
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) navigate('/admin/login');
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session?.user) {
+        navigate('/admin/login');
+        return;
+      }
+      verify(session.user.id, session.user.email ?? '');
+    });
+
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminUser');
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     navigate('/admin/login');
   };
 
@@ -66,7 +102,7 @@ const AdminDashboard = () => {
               Manajemen User
             </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="gallery">
             <GalleryManagement adminUser={adminUser} />
           </TabsContent>
@@ -74,7 +110,7 @@ const AdminDashboard = () => {
           <TabsContent value="cases">
             <CaseStudyManagement adminUser={adminUser} />
           </TabsContent>
-          
+
           <TabsContent value="users">
             {adminUser && <UserManagement currentUserId={adminUser.id} />}
           </TabsContent>
