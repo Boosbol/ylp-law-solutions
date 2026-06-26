@@ -83,8 +83,8 @@ const UserManagement = ({ currentUserId }: UserManagementProps) => {
         .insert([{
           name: newUser.name,
           email: newUser.email,
-          password_hash: passwordHash
-        }])
+          password_hash: passwordHash,
+        } as any])
         .select()
         .single();
 
