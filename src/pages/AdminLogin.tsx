@@ -43,7 +43,7 @@ const AdminLogin = () => {
       }
 
       // Verify password using bcrypt
-      const isPasswordValid = await bcrypt.compare(password, adminUser.password_hash);
+      const isPasswordValid = await bcrypt.compare(password, (adminUser as any).password_hash);
       
       console.log('Password verification result:', isPasswordValid);
 
